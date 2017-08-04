@@ -26,6 +26,8 @@ pipeline {
             sh "ls -la"
             stash excludes: 'example/', name: 'source'
           }
+          deleteDir()
+          sh "ls -la"
         }
       }
     }
@@ -40,12 +42,14 @@ pipeline {
           sh "ant prepare"
           sh "ant lint-source"
           sh "ant lint-tests"
+          echo "save report ..."
           dir("build")
           {
             stash name: "lint-source.log", includes: "lint-source.log"
             stash name: "lint-tests.log", includes: "lint-tests.log"
           }
-          echo "save report ..."
+          deleteDir()
+          sh "ls -la"
         }
       }
     }
