@@ -172,18 +172,22 @@
 </target>
 
 <target name="phpcpd-txt" unless="phpcpd-txt.done" description="">
+   <record name="${basedir}/build/phpcpd.txt" action="start" append="false" />
   <exec executable="${phpcpd}" taskname="phpcpd">
    <arg path="${basedir}/Slim" />
   </exec>
+   <record name="${basedir}/build/phpcpd.txt" action="stop" />
     <property name="phpcpd-txt.done" value="true"/>
 </target>
 
   <target name="phpcpd-xml" unless="phpcpd-xml.done" description="">
+   <record name="${basedir}/build/phpcpd.log" action="start" append="false" />
   <exec executable="${phpcpd}" taskname="phpcpd">
    <arg value="--log-pmd" />
-   <arg path="${basedir}/build/logs/pmd-cpd.xml" />
+   <arg path="${basedir}/build/phpcpd.xml" />
    <arg path="${basedir}/Slim" />
   </exec>
+   <record name="${basedir}/build/phpcpd.log" action="stop" />
     <property name="phpcpd-xml.done" value="true"/>
 </target>
 

@@ -179,8 +179,16 @@ pipeline {
               echo "fetch from local scm ..."
               unstash "source"
               unstash "build.xml"
-              sh "ls -la"
               echo "phpcpd txt process ..."
+              sh "ant prepare"
+              sh "ant phpcpd-txt"
+              echo "save results ..."
+              dir("build")
+              {
+                stash name: "phpcpd.txt", includes: "phpcpd.txt"
+              }              
+              deleteDir()
+            }
             }
           },
           "phpcpd-xml": {
@@ -188,8 +196,16 @@ pipeline {
               echo "fetch from local scm ..."
               unstash "source"
               unstash "build.xml"
-              sh "ls -la"
-              echo "phpcpd xml process ..."
+              echo "phpcpd txt process ..."
+              sh "ant prepare"
+              sh "ant phpcpd-xml"
+              echo "save results ..."
+              dir("build")
+              {
+                stash name: "phpcpd.log", includes: "phpcpd.log"
+                stash name: "phpcpd.xml", includes: "phpcpd.xml"
+              }              
+              deleteDir()
             }
           },
           "phpunit": {
@@ -235,6 +251,9 @@ pipeline {
           unstash "phpcs.log"
           unstash "phpcs.txt"
           unstash "checkstyle.xml"
+          unstash "phpcpd.log"
+          unstash "phpcpd.txt"
+          unstash "phpcpd.xml"
           sh "ls -la"
           echo "build artefacts ..."
           echo "publish artefacts ..."
