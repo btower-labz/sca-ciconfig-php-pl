@@ -54,6 +54,7 @@
 </target>
  
  <target name="lint-source" unless="lint-source.done" description="Perform syntax check of sourcecode files">
+ <record name="${basedir}/build/lint-source.log" action="start" append="false" />
   <apply executable="${php}" taskname="lint">
     <arg value="-l" />
       <fileset dir="${basedir}/Slim">
@@ -61,10 +62,12 @@
         <modified />
       </fileset>
   </apply>
+ <record name="${basedir}/build/lint-source.log" action="stop" />
   <property name="lint-source.done" value="true"/>
 </target>
 
  <target name="lint-tests" unless="lint-tests.done" description="Perform syntax check of tests files">
+ <record name="${basedir}/build/lint-tests.log" action="start" append="false" />
   <apply executable="php" taskname="lint">
     <arg value="-l" />
       <fileset dir="${basedir}/tests">
@@ -73,6 +76,7 @@
       </fileset>
   </apply>
   <property name="lint-tests.done" value="true"/>
+ <record name="${basedir}/build/lint-tests.log" action="stop" />
 </target>
 
 <target name="phploc-txt" unless="phploc-txt.done" description="">

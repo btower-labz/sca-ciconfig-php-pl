@@ -35,7 +35,14 @@ pipeline {
           unstash "build.xml"
           sh "ls -la"
           echo "check syntax ..."
-          sh "ant"
+          sh "ant prepare"
+          sh "ant lint-source"
+          sh "ant lint-tests"
+          dir("build")
+          {
+            stash name: "lint-source.log", includes: "lint-source.log"
+            stash name: "lint-tests.log", includes: "lint-tests.log"
+          }
           echo "save report ..."
         }
       }
@@ -150,6 +157,9 @@ pipeline {
       steps {
         node("php") {
           echo "unstash result  data ..."
+          unstash "lint-source.log"
+          unstash "lint-test.log"
+          sh "ls -la"
           echo "build artefacts ..."
           echo "publish artefacts ..."
         }
