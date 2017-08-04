@@ -80,24 +80,28 @@
 </target>
 
 <target name="phploc-txt" unless="phploc-txt.done" description="">
+   <record name="${basedir}/build/phploc.txt" action="start" append="false" />
    <exec executable="${phploc}" taskname="phploc">
     <arg value="--count-tests" />
     <arg path="${basedir}/tests" />
   </exec>
+   <record name="${basedir}/build/phploc.txt" action="stop" />
   <property name="phploc-txt.done" value="true"/>
 </target>
 
 <target name="phploc-xml" unless="phploc-xml.done" description="">
-<exec executable="${phploc}" taskname="phploc">
-   <arg value="--count-tests" />
-   <arg value="--log-csv" />
-   <arg path="${basedir}/build/logs/phploc.csv" />
-   <arg value="--log-xml" />
-   <arg path="${basedir}/build/logs/phploc.xml" />
-   <arg path="${basedir}/Slim" />
-   <arg path="${basedir}/tests" />
-  </exec>
-  <property name="phploc-xml.done" value="true"/>
+   <record name="${basedir}/build/phploc.log" action="start" append="false" />
+  <exec executable="${phploc}" taskname="phploc">
+     <arg value="--count-tests" />
+     <arg value="--log-csv" />
+     <arg path="${basedir}/build/phploc.csv" />
+     <arg value="--log-xml" />
+     <arg path="${basedir}/build/phploc.xml" />
+     <arg path="${basedir}/Slim" />
+     <arg path="${basedir}/tests" />
+    </exec>
+    <record name="${basedir}/build/phploc.log" action="stop" />
+    <property name="phploc-xml.done" value="true"/>
 </target>
   
   

@@ -58,23 +58,41 @@ pipeline {
       steps {
         parallel (
           "phploc-txt": {
-            node ("php") {
+            node ("phploc" && "ant") {
               echo "fetch from local scm ..."
               unstash "source"
               sh "ls -la"
               echo "phploc txt process ..."
+              sh "ant prepare"
+              sh "ant phploc-txt"
+              sh "ls -la"
+              dir("build")
+              {
+                sh "ls -la"
+                stash name: "phploc.txt", includes: "phploc.txt"
+              }              
             }
           },
           "phploc-xml": {
-            node ("php") {
+            node ("phploc" && "ant") {
               echo "fetch from local scm ..."
               unstash "source"
               sh "ls -la"
               echo "phploc xml process ..."
+              sh "ant prepare"
+              sh "ant phploc-xml"
+              sh "ls -la"
+              dir("build")
+              {
+                sh "ls -la"
+                stash name: "phploc.log", includes: "phploc.log"
+                stash name: "phploc.csv", includes: "phploc.csv"
+                stash name: "phploc.xml", includes: "phploc.xml"
+              }              
             }
           },
           "phpdepend-txt": {
-            node ("php") {
+            node ("phpdepend" && "ant") {
               echo "fetch from local scm ..."
               unstash "source"
               sh "ls -la"
@@ -82,7 +100,7 @@ pipeline {
             }
           },
           "phpdepend-xml": {
-            node ("php") {
+            node ("phpdepend" && "ant") {
               echo "fetch from local scm ..."
               unstash "source"
               sh "ls -la"
@@ -90,7 +108,7 @@ pipeline {
             }
           },          
           "phpmd-txt": {
-            node ("php") {
+            node ("phpmd" && "ant") {
               echo "fetch from local scm ..."
               unstash "source"
               sh "ls -la"
@@ -98,7 +116,7 @@ pipeline {
             }
           },
           "phpmd-xml": {
-            node ("php") {
+            node ("phpmd" && "ant") {
               echo "fetch from local scm ..."
               unstash "source"
               sh "ls -la"
@@ -106,7 +124,7 @@ pipeline {
             }
           },
           "phpcs-txt": {
-            node ("php") {
+            node ("phpcs" && "ant") {
               echo "fetch from local scm ..."
               unstash "source"
               unstash "phpcs.xml"
@@ -115,7 +133,7 @@ pipeline {
             }
           },
           "phpcs-xml": {
-            node ("php") {
+            node ("phpcs" && "ant") {
               echo "fetch from local scm ..."
               unstash "source"
               unstash "phpcs.xml"
@@ -124,7 +142,7 @@ pipeline {
             }
           },
           "phpcpd-txt": {
-            node ("php") {
+            node ("phpcpd" && "ant") {
               echo "fetch from local scm ..."
               unstash "source"
               sh "ls -la"
@@ -132,7 +150,7 @@ pipeline {
             }
           },
           "phpcpd-xml": {
-            node ("php") {
+            node ("phpcpd" && "ant") {
               echo "fetch from local scm ..."
               unstash "source"
               sh "ls -la"
@@ -140,7 +158,7 @@ pipeline {
             }
           },
           "phpunit": {
-            node ("php") {
+            node ("phpunit" && "ant") {
               echo "fetch from local scm ..."
               unstash "source"
               unstash "phpunit.xml"
@@ -149,7 +167,7 @@ pipeline {
             }
           },
           "phpdox": {
-            node ("php") {
+            node ("phpunit" && "ant") {
               echo "fetch from local scm ..."
               unstash "source"
               unstash "phpdox.xml"
@@ -165,7 +183,11 @@ pipeline {
         node("php") {
           echo "unstash result  data ..."
           unstash "lint-source.log"
-          unstash "lint-test.log"
+          unstash "lint-tests.log"
+          unstash "phploc.log"
+          unstash "phploc.csv"
+          unstash "phploc.xml"
+          unstash "phploc.txt"
           sh "ls -la"
           echo "build artefacts ..."
           echo "publish artefacts ..."
