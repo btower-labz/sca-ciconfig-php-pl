@@ -189,7 +189,6 @@ pipeline {
               }              
               deleteDir()
             }
-            }
           },
           "phpcpd-xml": {
             node ("phpcpd" && "ant") {
