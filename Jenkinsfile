@@ -61,6 +61,7 @@ pipeline {
             node ("phploc" && "ant") {
               echo "fetch from local scm ..."
               unstash "source"
+              unstash "build.xml"
               sh "ls -la"
               echo "phploc txt process ..."
               sh "ant prepare"
@@ -77,6 +78,7 @@ pipeline {
             node ("phploc" && "ant") {
               echo "fetch from local scm ..."
               unstash "source"
+              unstash "build.xml"
               sh "ls -la"
               echo "phploc xml process ..."
               sh "ant prepare"
