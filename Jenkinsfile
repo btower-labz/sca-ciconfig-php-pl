@@ -45,6 +45,7 @@ pipeline {
           echo "save report ..."
           dir("build")
           {
+            sh "ls -la"
             stash name: "lint-source.log", includes: "lint-source.log"
             stash name: "lint-tests.log", includes: "lint-tests.log"
           }
