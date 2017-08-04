@@ -220,6 +220,7 @@ pipeline {
               echo "save results ..."
               dir("build")
               {
+                sh "ls -la"
                 stash name: "phpunit.log", includes: "phpunit.log"
                 stash name: "clover.xml", includes: "clover.xml"
                 stash name: "crap4j.xml", includes: "crap4j.xml"
