@@ -108,9 +108,9 @@
   
 <target name="pdepend-xml" unless="pdepend-xml.done" description="">
 <exec executable="${pdepend}" taskname="pdepend">
-   <arg value="--jdepend-xml=${basedir}/build/logs/jdepend.xml" />
-   <arg value="--jdepend-chart=${basedir}/build/pdepend/dependencies.svg" />
-   <arg value="--overview-pyramid=${basedir}/build/pdepend/overview-pyramid.svg" />
+   <arg value="--jdepend-xml=${basedir}/build/jdepend.xml" />
+   <arg value="--jdepend-chart=${basedir}/build/dependencies.svg" />
+   <arg value="--overview-pyramid=${basedir}/build/overview-pyramid.svg" />
    <arg path="${basedir}/Slim" />
   </exec>
     <property name="pdepend-xml.done" value="true"/>

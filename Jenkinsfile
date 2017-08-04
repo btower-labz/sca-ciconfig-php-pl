@@ -37,7 +37,6 @@ pipeline {
           echo "fetch from local scm ..."
           unstash "source"
           unstash "build.xml"
-          sh "ls -la"
           echo "check syntax ..."
           sh "ant prepare"
           sh "ant lint-source"
@@ -45,12 +44,10 @@ pipeline {
           echo "save report ..."
           dir("build")
           {
-            sh "ls -la"
             stash name: "lint-source.log", includes: "lint-source.log"
             stash name: "lint-tests.log", includes: "lint-tests.log"
           }
           deleteDir()
-          sh "ls -la"
         }
       }
     }
@@ -62,16 +59,15 @@ pipeline {
               echo "fetch from local scm ..."
               unstash "source"
               unstash "build.xml"
-              sh "ls -la"
               echo "phploc txt process ..."
               sh "ant prepare"
               sh "ant phploc-txt"
               sh "ls -la"
               dir("build")
               {
-                sh "ls -la"
                 stash name: "phploc.txt", includes: "phploc.txt"
-              }              
+              }
+              deleteDir()
             }
           },
           "phploc-xml": {
@@ -79,40 +75,41 @@ pipeline {
               echo "fetch from local scm ..."
               unstash "source"
               unstash "build.xml"
-              sh "ls -la"
               echo "phploc xml process ..."
               sh "ant prepare"
               sh "ant phploc-xml"
-              sh "ls -la"
               dir("build")
               {
-                sh "ls -la"
                 stash name: "phploc.log", includes: "phploc.log"
                 stash name: "phploc.csv", includes: "phploc.csv"
                 stash name: "phploc.xml", includes: "phploc.xml"
               }              
-            }
-          },
-          "phpdepend-txt": {
-            node ("phpdepend" && "ant") {
-              echo "fetch from local scm ..."
-              unstash "source"
-              sh "ls -la"
-              echo "phpdepend txt process ..."
+              deleteDir()
             }
           },
           "phpdepend-xml": {
             node ("phpdepend" && "ant") {
               echo "fetch from local scm ..."
               unstash "source"
-              sh "ls -la"
+              unstash "build.xml"
               echo "phpdepend xml process ..."
+              sh "ant prepare"
+              sh "ant phpdepend-xml"
+              echo "save results ..."
+              dir("build")
+              {
+                stash name: "jdepend.xml", includes: "jdepend.xml"
+                stash name: "dependencies.svg", includes: "dependencies.svg"
+                stash name: "overview-pyramid.svg", includes: "overview-pyramid.svg"
+              }              
+              deleteDir()
             }
           },          
           "phpmd-txt": {
             node ("phpmd" && "ant") {
               echo "fetch from local scm ..."
               unstash "source"
+              unstash "build.xml"
               sh "ls -la"
               echo "phpmd txt process ..."
             }
@@ -121,6 +118,7 @@ pipeline {
             node ("phpmd" && "ant") {
               echo "fetch from local scm ..."
               unstash "source"
+              unstash "build.xml"
               sh "ls -la"
               echo "phpmd xml process ..."
             }
@@ -129,6 +127,7 @@ pipeline {
             node ("phpcs" && "ant") {
               echo "fetch from local scm ..."
               unstash "source"
+              unstash "build.xml"
               unstash "phpcs.xml"
               sh "ls -la"
               echo "phpsc txt process ..."
@@ -138,6 +137,7 @@ pipeline {
             node ("phpcs" && "ant") {
               echo "fetch from local scm ..."
               unstash "source"
+              unstash "build.xml"
               unstash "phpcs.xml"
               sh "ls -la"
               echo "phpsc xml process ..."
@@ -147,6 +147,7 @@ pipeline {
             node ("phpcpd" && "ant") {
               echo "fetch from local scm ..."
               unstash "source"
+              unstash "build.xml"
               sh "ls -la"
               echo "phpcpd txt process ..."
             }
@@ -155,6 +156,7 @@ pipeline {
             node ("phpcpd" && "ant") {
               echo "fetch from local scm ..."
               unstash "source"
+              unstash "build.xml"
               sh "ls -la"
               echo "phpcpd xml process ..."
             }
@@ -163,6 +165,7 @@ pipeline {
             node ("phpunit" && "ant") {
               echo "fetch from local scm ..."
               unstash "source"
+              unstash "build.xml"
               unstash "phpunit.xml"
               sh "ls -la"
               echo "phpunit process ..."
@@ -172,6 +175,7 @@ pipeline {
             node ("phpunit" && "ant") {
               echo "fetch from local scm ..."
               unstash "source"
+              unstash "build.xml"
               unstash "phpdox.xml"
               sh "ls -la"
               echo "phpdox process ..."
@@ -190,6 +194,9 @@ pipeline {
           unstash "phploc.csv"
           unstash "phploc.xml"
           unstash "phploc.txt"
+          unstash "jdepend.xml"
+          unstash "dependencies.svg"
+          unstash "overview-pyramid.svg"
           sh "ls -la"
           echo "build artefacts ..."
           echo "publish artefacts ..."
