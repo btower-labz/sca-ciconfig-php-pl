@@ -214,6 +214,7 @@ pipeline {
               unstash "build.xml"
               unstash "phpunit.xml"
               echo "phpunit process ..."
+              sh "ls -la"
               sh "ant prepare"
               sh "ant phpunit"
               echo "save results ..."

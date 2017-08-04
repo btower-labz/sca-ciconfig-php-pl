@@ -7,7 +7,8 @@
 <property name="pdepend"  value="pdepend"/>
 <property name="phpmd"  value="phpmd"/>
 <property name="phpdox"  value="phpdox"/>
-<property name="phpunit"  value="phpunit"/>
+<!--property name="phpunit"  value="phpunit"/-->
+<property name="phpunit"  value="${env.WORKSPACE}/vendor/bin/phpunit"/>
 <property name="composer" value="composer" />
 <property name="phpcpd"  value="phpcpd"/>
 <property name="phpcs"  value="phpcs"/>
