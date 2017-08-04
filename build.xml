@@ -204,7 +204,7 @@
 </target>
 
 
-<target name="phpdox.done" unless="phpdox.done" description="">
+<target name="phpdox" unless="phpdox.done" description="">
    <record name="${basedir}/build/phpdox.log" action="start" append="false" />
 <exec executable="${phpdox}" dir="${basedir}" taskname="phpdox">
  <arg value="--file" />

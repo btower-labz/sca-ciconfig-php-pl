@@ -302,6 +302,14 @@ pipeline {
           sh "ls -la ./api"
           echo "build artefacts ..."
           echo "publish artefacts ..."
+          publishHTML (target: [
+              allowMissing: false,
+              alwaysLinkToLastBuild: false,
+              keepAll: true,
+              reportDir: 'api',
+              reportFiles: 'index.html',
+              reportName: "API Documentation (phpdox)"
+            ])          
         }
       }
     }
