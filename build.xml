@@ -143,27 +143,31 @@
 </target>
 
 <target name="phpcs-txt" unless="phpcs-txt.done" description="">
-<exec executable="${phpcs}" taskname="phpcs">
-   <arg value="--standard=PSR2" />
-   <arg value="--extensions=php" />
-   <arg value="--ignore=autoload.php" />
-   <arg path="${basedir}/Slim" />
-   <arg path="${basedir}/tests" />
-  </exec>
+   <record name="${basedir}/build/phpcs.txt" action="start" append="false" />
+  <exec executable="${phpcs}" taskname="phpcs">
+     <arg value="--standard=PSR2" />
+     <arg value="--extensions=php" />
+     <arg value="--ignore=autoload.php" />
+     <arg path="${basedir}/Slim" />
+     <!-- arg path="${basedir}/tests" / -->
+    </exec>
+     <record name="${basedir}/build/phpcs.txt" action="stop"/>
     <property name="phpcs-txt.done" value="true"/>
 </target>
 
   
 <target name="phpcs-xml" unless="phpcs-xml.done" description="">
+   <record name="${basedir}/build/phpcs.log" action="start" append="false" />
 <exec executable="${phpcs}" output="/dev/null" taskname="phpcs">
    <arg value="--report=checkstyle" />
-   <arg value="--report-file=${basedir}/build/logs/checkstyle.xml" />
+   <arg value="--report-file=${basedir}/build/checkstyle.xml" />
    <arg value="--standard=PSR2" />
    <arg value="--extensions=php" />
    <arg value="--ignore=autoload.php" />
    <arg path="${basedir}/Slim" />
-   <arg path="${basedir}/tests" />
+   <!-- arg path="${basedir}/tests" / -->
   </exec>
+     <record name="${basedir}/build/phpcs.log" action="stop"/>
     <property name="phpcs-xml.done" value="true"/>
 </target>
 

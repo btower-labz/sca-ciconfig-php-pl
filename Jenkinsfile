@@ -136,6 +136,7 @@ pipeline {
                 stash name: "phpmd.log", includes: "phpmd.log"
                 stash name: "phpmd.xml", includes: "phpmd.xml"
               }              
+              deleteDir()
             }
           },
           "phpcs-txt": {
@@ -144,8 +145,15 @@ pipeline {
               unstash "source"
               unstash "build.xml"
               unstash "phpcs.xml"
-              sh "ls -la"
               echo "phpsc txt process ..."
+              sh "ant prepare"
+              sh "ant phpcs-txt"
+              echo "save results ..."
+              dir("build")
+              {
+                stash name: "phpcs.txt", includes: "phpcs.txt"
+              }              
+              deleteDir()
             }
           },
           "phpcs-xml": {
@@ -154,8 +162,16 @@ pipeline {
               unstash "source"
               unstash "build.xml"
               unstash "phpcs.xml"
-              sh "ls -la"
-              echo "phpsc xml process ..."
+              echo "phpsc txt process ..."
+              sh "ant prepare"
+              sh "ant phpcs-txt"
+              echo "save results ..."
+              dir("build")
+              {
+                stash name: "phpcs.log", includes: "phpcs.log"
+                stash name: "checkstyle.xml", includes: "checkstyle.xml"
+              }              
+              deleteDir()
             }
           },
           "phpcpd-txt": {
