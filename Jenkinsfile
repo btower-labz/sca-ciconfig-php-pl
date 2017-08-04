@@ -87,14 +87,14 @@ pipeline {
               deleteDir()
             }
           },
-          "phpdepend-xml": {
+          "pdepend-xml": {
             node ("phpdepend" && "ant") {
               echo "fetch from local scm ..."
               unstash "source"
               unstash "build.xml"
-              echo "phpdepend xml process ..."
+              echo "pdepend xml process ..."
               sh "ant prepare"
-              sh "ant phpdepend-xml"
+              sh "ant pdepend-xml"
               echo "save results ..."
               dir("build")
               {
