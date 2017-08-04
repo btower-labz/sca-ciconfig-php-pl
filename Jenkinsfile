@@ -213,8 +213,19 @@ pipeline {
               unstash "source"
               unstash "build.xml"
               unstash "phpunit.xml"
-              sh "ls -la"
               echo "phpunit process ..."
+              sh "ant prepare"
+              sh "ant phpunit"
+              echo "save results ..."
+              dir("build")
+              {
+                stash name: "phpunit.log", includes: "phpunit.log"
+                stash name: "clover.xml", includes: "clover.xml"
+                stash name: "crap4j.xml", includes: "crap4j.xml"
+                stash name: "junit.xml", includes: "junit.xml"
+                stash name: "coverage", includes: "coverage"
+              }              
+              deleteDir()
             }
           },
           "phpdox": {
@@ -223,8 +234,16 @@ pipeline {
               unstash "source"
               unstash "build.xml"
               unstash "phpdox.xml"
-              sh "ls -la"
               echo "phpdox process ..."
+              sh "ant prepare"
+              sh "ant phpdox"
+              echo "save results ..."
+              dir("build")
+              {
+                stash name: "phpdox.log", includes: "phpdox.log"
+                stash name: "phpdox", includes: "phpdox"
+              }              
+              deleteDir()
             }
           }
         )
@@ -253,6 +272,13 @@ pipeline {
           unstash "phpcpd.log"
           unstash "phpcpd.txt"
           unstash "phpcpd.xml"
+          unstash "clover.xml"
+          unstash "crap4j.xml"
+          unstash "junit.xml"
+          unstash "coverage"
+          unstash "phpunit.log"
+          unstash "phpdox"
+          unstash "phpdox.log"
           sh "ls -la"
           echo "build artefacts ..."
           echo "publish artefacts ..."

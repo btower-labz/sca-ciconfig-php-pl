@@ -192,6 +192,7 @@
 </target>
 
   <target name="phpunit" unless="phpunit.done" description="">
+   <record name="${basedir}/build/phpunit.log" action="start" append="false" />
 <exec executable="${composer}" taskname="composer" dir="./">
    <arg value="install"/>
 </exec>
@@ -199,15 +200,18 @@
    <arg value="--configuration"/>
    <arg path="${basedir}/phpunit.xml"/>
 </exec>
+   <record name="${basedir}/build/phpunit.log" action="stop" />
   <property name="phpunit.done" value="true"/>
 </target>
 
 
 <target name="phpdox.done" unless="phpdox.done" description="">
+   <record name="${basedir}/build/phpdox.log" action="start" append="false" />
 <exec executable="${phpdox}" dir="${basedir}" taskname="phpdox">
  <arg value="--file" />
  <arg path="${basedir}/phpdox.xml"/>
 </exec>
+   <record name="${basedir}/build/phpdox.log" action="stop" />
   <property name="phpdox.done" value="true"/>
 </target>
 
