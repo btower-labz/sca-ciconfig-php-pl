@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="free-sca-php-project" default="info">
+
+<property environment="env"/>
+<property name="php"  value="php"/>
+<property name="phploc"  value="phploc"/>
+<property name="pdepend"  value="pdepend"/>
+<property name="phpmd"  value="phpmd"/>
+<property name="phpdox"  value="phpdox"/>
+<property name="phpunit"  value="phpunit"/>
+<property name="composer" value="composer" />
+<property name="phpcpd"  value="phpcpd"/>
+<property name="phpcs"  value="phpcs"/>
+<property name="srcpath"  value="./Slim"/>
+<property name="tstpath"  value="./tests"/>
+
+
+<target name="info" description="Show environment information">
+  <echo message="ANT basedir: ${basedir}"/>
+  <echo message="Jenkins workspace: ${env.WORKSPACE}"/>
+  <echo message="Jenkins home: ${env.JENKINS_HOME}"/>
+  <echo message="Job directory: ${env.WORKSPACE}../../jobs/${env.JOB_NAME}"/>
+  <echo message="Build data: ${env.WORKSPACE}../../jobs/${env.JOB_NAME}/build/${env.BUILD_ID}"/>
+</target>
+
+<target name="phpinfo" description="Show php version and environment">
+  <exec executable="${php}" taskname="php-version">
+    <arg value="--version" />
+  </exec>
+  <exec executable="${php}" taskname="php-ini">
+    <arg value="--ini" />
+  </exec>
+  <exec executable="${php}" taskname="php-modules">
+    <arg value="-m" />
+  </exec>
+</target>
+
+<target name="prepare" unless="prepare.done" depends="clean" description="Prepare for build">
+  <mkdir dir="${basedir}/build/api"/>
+  <mkdir dir="${basedir}/build/coverage"/>
+  <mkdir dir="${basedir}/build/logs"/>
+  <mkdir dir="${basedir}/build/pdepend"/>
+  <mkdir dir="${basedir}/build/phpdox"/>
+  <property name="prepare.done" value="true"/>
+ </target>
+  
+<target name="clean" unless="clean.done" description="Cleanup build artifacts">
+  <delete dir="${basedir}/build/api"/>
+  <delete dir="${basedir}/build/coverage"/>
+  <delete dir="${basedir}/build/logs"/>
+  <delete dir="${basedir}/build/pdepend"/>
+  <delete dir="${basedir}/build/phpdox"/>
+  <property name="clean.done" value="true"/>
+</target>
+ 
+ <target name="lint-source" unless="lint-source.done" description="Perform syntax check of sourcecode files">
+  <apply executable="${php}" taskname="lint">
+    <arg value="-l" />
+      <fileset dir="${basedir}/Slim">
+        <include name="**/*.php" />
+        <modified />
+      </fileset>
+  </apply>
+  <property name="lint-source.done" value="true"/>
+</target>
+
+ <target name="lint-tests" unless="lint-tests.done" description="Perform syntax check of tests files">
+  <apply executable="php" taskname="lint">
+    <arg value="-l" />
+      <fileset dir="${basedir}/tests">
+        <include name="**/*.php" />
+        <modified />
+      </fileset>
+  </apply>
+  <property name="lint-tests.done" value="true"/>
+</target>
+
+<target name="phploc-txt" unless="phploc-txt.done" description="">
+   <exec executable="${phploc}" taskname="phploc">
+    <arg value="--count-tests" />
+    <arg path="${basedir}/tests" />
+  </exec>
+  <property name="phploc-txt.done" value="true"/>
+</target>
+
+<target name="phploc-xml" unless="phploc-xml.done" description="">
+<exec executable="${phploc}" taskname="phploc">
+   <arg value="--count-tests" />
+   <arg value="--log-csv" />
+   <arg path="${basedir}/build/logs/phploc.csv" />
+   <arg value="--log-xml" />
+   <arg path="${basedir}/build/logs/phploc.xml" />
+   <arg path="${basedir}/Slim" />
+   <arg path="${basedir}/tests" />
+  </exec>
+  <property name="phploc-xml.done" value="true"/>
+</target>
+  
+  
+  
+<target name="pdepend-xml" unless="pdepend-xml.done" description="">
+<exec executable="${pdepend}" taskname="pdepend">
+   <arg value="--jdepend-xml=${basedir}/build/logs/jdepend.xml" />
+   <arg value="--jdepend-chart=${basedir}/build/pdepend/dependencies.svg" />
+   <arg value="--overview-pyramid=${basedir}/build/pdepend/overview-pyramid.svg" />
+   <arg path="${basedir}/Slim" />
+  </exec>
+    <property name="pdepend-xml.done" value="true"/>
+</target>
+
+  
+<target name="phpmd-txt" unless="phpmd-txt.done" description="">
+<exec executable="${phpmd}" taskname="phpmd">
+   <arg path="${basedir}/Slim" />
+   <arg value="text" />
+   <arg value="codesize" />
+  </exec>
+    <property name="phpmd-txt.done" value="true"/>
+</target>
+
+  
+<target name="phpmd-xml" unless="phpmd-xml.done" description="">
+<exec executable="${phpmd}" taskname="phpmd">
+   <arg path="${basedir}/source/${SRC_DIR}" />
+   <arg value="xml" />
+   <arg value="codesize" />
+   <arg value="--reportfile" />
+   <arg path="${basedir}/build/logs/pmd.xml" />
+  </exec>
+  <property name="phpmd-xml.done" value="true"/>
+</target>
+
+<target name="phpcs-txt" unless="phpcs-txt.done" description="">
+<exec executable="${phpcs}" taskname="phpcs">
+   <arg value="--standard=PSR2" />
+   <arg value="--extensions=php" />
+   <arg value="--ignore=autoload.php" />
+   <arg path="${basedir}/Slim" />
+   <arg path="${basedir}/tests" />
+  </exec>
+    <property name="phpcs-txt.done" value="true"/>
+</target>
+
+  
+<target name="phpcs-xml" unless="phpcs-xml.done" description="">
+<exec executable="${phpcs}" output="/dev/null" taskname="phpcs">
+   <arg value="--report=checkstyle" />
+   <arg value="--report-file=${basedir}/build/logs/checkstyle.xml" />
+   <arg value="--standard=PSR2" />
+   <arg value="--extensions=php" />
+   <arg value="--ignore=autoload.php" />
+   <arg path="${basedir}/Slim" />
+   <arg path="${basedir}/tests" />
+  </exec>
+    <property name="phpcs-xml.done" value="true"/>
+</target>
+
+<target name="phpcpd-txt" unless="phpcpd-txt.done" description="">
+  <exec executable="${phpcpd}" taskname="phpcpd">
+   <arg path="${basedir}/Slim" />
+  </exec>
+    <property name="phpcpd-txt.done" value="true"/>
+</target>
+
+  <target name="phpcpd-xml" unless="phpcpd-xml.done" description="">
+  <exec executable="${phpcpd}" taskname="phpcpd">
+   <arg value="--log-pmd" />
+   <arg path="${basedir}/build/logs/pmd-cpd.xml" />
+   <arg path="${basedir}/Slim" />
+  </exec>
+    <property name="phpcpd-xml.done" value="true"/>
+</target>
+
+  <target name="phpunit" unless="phpunit.done" description="">
+<exec executable="${composer}" taskname="composer" dir="./">
+   <arg value="install"/>
+</exec>
+<exec executable="${phpunit}" failonerror="true" taskname="phpunit" dir="./">
+   <arg value="--configuration"/>
+   <arg path="${basedir}/phpunit.xml"/>
+</exec>
+  <property name="phpunit.done" value="true"/>
+</target>
+
+
+<target name="phpdox.done" unless="phpdox.done" description="">
+<exec executable="${phpdox}" dir="${basedir}" taskname="phpdox">
+ <arg value="--file" />
+ <arg path="${basedir}/phpdox.xml"/>
+</exec>
+  <property name="phpdox.done" value="true"/>
+</target>
+
+
+</project>
