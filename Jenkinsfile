@@ -220,12 +220,13 @@ pipeline {
               echo "save results ..."
               dir("build")
               {
-                sh "ls -la"
                 stash name: "phpunit.log", includes: "phpunit.log"
                 stash name: "clover.xml", includes: "clover.xml"
                 stash name: "crap4j.xml", includes: "crap4j.xml"
                 stash name: "junit.xml", includes: "junit.xml"
-                stash name: "coverage", includes: "coverage"
+                dir("coverage") {
+                 stash name: "coverage"
+                }
               }              
               deleteDir()
             }
@@ -243,7 +244,12 @@ pipeline {
               dir("build")
               {
                 stash name: "phpdox.log", includes: "phpdox.log"
-                stash name: "phpdox", includes: "phpdox"
+                dir("phpdox") {
+                 stash name: "phpdox"
+                }
+                dir("api") {
+                 stash name: "api"
+                }
               }              
               deleteDir()
             }
@@ -277,11 +283,23 @@ pipeline {
           unstash "clover.xml"
           unstash "crap4j.xml"
           unstash "junit.xml"
-          unstash "coverage"
+          dir("coverage"){
+            unstash "coverage"
+          }
           unstash "phpunit.log"
-          unstash "phpdox"
+          dir("phpdox")
+          {
+            unstash "phpdox"
+          }
+          dir("api")
+          {
+            unstash "api"
+          }
           unstash "phpdox.log"
           sh "ls -la"
+          sh "ls -la ./coverage"
+          sh "ls -la ./phpdox"
+          sh "ls -la ./api"
           echo "build artefacts ..."
           echo "publish artefacts ..."
         }
