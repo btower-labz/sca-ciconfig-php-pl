@@ -104,38 +104,42 @@
     <property name="phploc-xml.done" value="true"/>
 </target>
   
-  
-  
 <target name="pdepend-xml" unless="pdepend-xml.done" description="">
-<exec executable="${pdepend}" taskname="pdepend">
-   <arg value="--jdepend-xml=${basedir}/build/jdepend.xml" />
-   <arg value="--jdepend-chart=${basedir}/build/dependencies.svg" />
-   <arg value="--overview-pyramid=${basedir}/build/overview-pyramid.svg" />
-   <arg path="${basedir}/Slim" />
-  </exec>
+   <record name="${basedir}/build/pdepend.log" action="start" append="false" />
+  <exec executable="${pdepend}" taskname="pdepend">
+     <arg value="--jdepend-xml=${basedir}/build/jdepend.xml" />
+     <arg value="--jdepend-chart=${basedir}/build/dependencies.svg" />
+     <arg value="--overview-pyramid=${basedir}/build/overview-pyramid.svg" />
+     <arg path="${basedir}/Slim" />
+    </exec>
+   <record name="${basedir}/build/pdepend.log" action="stop" />
     <property name="pdepend-xml.done" value="true"/>
 </target>
 
   
 <target name="phpmd-txt" unless="phpmd-txt.done" description="">
-<exec executable="${phpmd}" taskname="phpmd">
-   <arg path="${basedir}/Slim" />
-   <arg value="text" />
-   <arg value="codesize" />
-  </exec>
+   <record name="${basedir}/build/phpmd.txt" action="start" append="false" />
+  <exec executable="${phpmd}" taskname="phpmd">
+     <arg path="${basedir}/Slim" />
+     <arg value="text" />
+     <arg value="codesize" />
+    </exec>
+    <record name="${basedir}/build/phpmd.txt" action="stop" />
     <property name="phpmd-txt.done" value="true"/>
 </target>
 
   
 <target name="phpmd-xml" unless="phpmd-xml.done" description="">
-<exec executable="${phpmd}" taskname="phpmd">
-   <arg path="${basedir}/source/${SRC_DIR}" />
-   <arg value="xml" />
-   <arg value="codesize" />
-   <arg value="--reportfile" />
-   <arg path="${basedir}/build/logs/pmd.xml" />
-  </exec>
-  <property name="phpmd-xml.done" value="true"/>
+   <record name="${basedir}/build/phpmd.log" action="start" append="false" />
+  <exec executable="${phpmd}" taskname="phpmd">
+     <arg path="${basedir}/source/${SRC_DIR}" />
+     <arg value="xml" />
+     <arg value="codesize" />
+     <arg value="--reportfile" />
+     <arg path="${basedir}/build/phpmd.xml" />
+    </exec>
+    <property name="phpmd-xml.done" value="true"/>
+   <record name="${basedir}/build/phpmd.log" action="start" append="false" />
 </target>
 
 <target name="phpcs-txt" unless="phpcs-txt.done" description="">

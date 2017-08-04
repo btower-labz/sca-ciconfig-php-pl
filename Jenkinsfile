@@ -98,6 +98,7 @@ pipeline {
               echo "save results ..."
               dir("build")
               {
+                stash name: "pdepend.log", includes: "pdepend.log"
                 stash name: "jdepend.xml", includes: "jdepend.xml"
                 stash name: "dependencies.svg", includes: "dependencies.svg"
                 stash name: "overview-pyramid.svg", includes: "overview-pyramid.svg"
@@ -110,8 +111,15 @@ pipeline {
               echo "fetch from local scm ..."
               unstash "source"
               unstash "build.xml"
-              sh "ls -la"
               echo "phpmd txt process ..."
+              sh "ant prepare"
+              sh "ant phpmd-txt"
+              echo "save results ..."
+              dir("build")
+              {
+                stash name: "phpmd.txt", includes: "phpmd.txt"
+              }              
+              deleteDir()
             }
           },
           "phpmd-xml": {
@@ -119,8 +127,15 @@ pipeline {
               echo "fetch from local scm ..."
               unstash "source"
               unstash "build.xml"
-              sh "ls -la"
               echo "phpmd xml process ..."
+              sh "ant prepare"
+              sh "ant phpmd-xml"
+              echo "save results ..."
+              dir("build")
+              {
+                stash name: "phpmd.log", includes: "phpmd.log"
+                stash name: "phpmd.xml", includes: "phpmd.xml"
+              }              
             }
           },
           "phpcs-txt": {
@@ -195,8 +210,12 @@ pipeline {
           unstash "phploc.xml"
           unstash "phploc.txt"
           unstash "jdepend.xml"
+          unstash "pdepend.log"
           unstash "dependencies.svg"
           unstash "overview-pyramid.svg"
+          unstash "phpmd.log"
+          unstash "phpmd.txt"
+          unstash "phpmd.xml"
           sh "ls -la"
           echo "build artefacts ..."
           echo "publish artefacts ..."
