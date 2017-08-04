@@ -4,6 +4,7 @@ pipeline {
     stage("prepare") {
       steps {
         node("php") {
+          /*
           echo "fetch config from scs ..."
           timeout(time: 5, unit: "MINUTES"){
             dir("config"){
@@ -18,6 +19,12 @@ pipeline {
               stash name: "build.xml", includes: "build.xml"
             }
           }
+          */
+          echo "saving configs"
+          stash name: "phpunit.xml", includes: "phpunit.xml"
+          stash name: "phpdox.xml", includes: "phpdox.xml"
+          stash name: "phpcs.xml", includes: "phpcs.xml"
+          stash name: "build.xml", includes: "build.xml"
           echo "fetch source from scm ..."
           dir("source"){
             git url: "https://github.com/slimphp/Slim", branch: "3.x", changelog: true, poll: true
