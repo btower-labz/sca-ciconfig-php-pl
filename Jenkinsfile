@@ -164,7 +164,7 @@ pipeline {
               unstash "phpcs.xml"
               echo "phpsc txt process ..."
               sh "ant prepare"
-              sh "ant phpcs-txt"
+              sh "ant phpcs-xml"
               echo "save results ..."
               dir("build")
               {
