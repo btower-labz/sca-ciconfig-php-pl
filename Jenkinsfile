@@ -259,58 +259,69 @@ pipeline {
     }
     stage("publish") {
       steps {
-        node("php") {
-          echo "unstash result  data ..."
-          unstash "lint-source.log"
-          unstash "lint-tests.log"
-          unstash "phploc.log"
-          unstash "phploc.csv"
-          unstash "phploc.xml"
-          unstash "phploc.txt"
-          unstash "jdepend.xml"
-          unstash "pdepend.log"
-          unstash "dependencies.svg"
-          unstash "overview-pyramid.svg"
-          unstash "phpmd.log"
-          unstash "phpmd.txt"
-          unstash "phpmd.xml"
-          unstash "phpcs.log"
-          unstash "phpcs.txt"
-          unstash "checkstyle.xml"
-          unstash "phpcpd.log"
-          unstash "phpcpd.txt"
-          unstash "phpcpd.xml"
-          unstash "clover.xml"
-          unstash "crap4j.xml"
-          unstash "junit.xml"
-          dir("coverage"){
-            unstash "coverage"
-          }
-          unstash "phpunit.log"
-          dir("phpdox")
-          {
-            unstash "phpdox"
-          }
-          dir("api")
-          {
-            unstash "api"
-          }
-          unstash "phpdox.log"
-          sh "ls -la"
-          sh "ls -la ./coverage"
-          sh "ls -la ./phpdox"
-          sh "ls -la ./api"
-          echo "build artefacts ..."
-          echo "publish artefacts ..."
-          publishHTML (target: [
-              allowMissing: false,
-              alwaysLinkToLastBuild: false,
-              keepAll: true,
-              reportDir: 'api',
-              reportFiles: 'index.html',
-              reportName: "API Documentation (phpdox)"
-            ])          
-        }
+        parallel (
+          "report1": {
+            node ("ant") {
+              echo "unstash result  data ..."
+              unstash "lint-source.log"
+              unstash "lint-tests.log"
+              unstash "phploc.log"
+              unstash "phploc.csv"
+              unstash "phploc.xml"
+              unstash "phploc.txt"
+              unstash "jdepend.xml"
+              unstash "pdepend.log"
+              unstash "dependencies.svg"
+              unstash "overview-pyramid.svg"
+              unstash "phpmd.log"
+              unstash "phpmd.txt"
+              unstash "phpmd.xml"
+              unstash "phpcs.log"
+              unstash "phpcs.txt"
+              unstash "checkstyle.xml"
+              unstash "phpcpd.log"
+              unstash "phpcpd.txt"
+              unstash "phpcpd.xml"
+              unstash "clover.xml"
+              unstash "crap4j.xml"
+              unstash "junit.xml"
+              dir("coverage"){
+                unstash "coverage"
+              }
+              unstash "phpunit.log"
+              dir("phpdox")
+              {
+                unstash "phpdox"
+              }
+              dir("api")
+              {
+                unstash "api"
+              }
+              unstash "phpdox.log"
+              sh "ls -la"
+              sh "ls -la ./coverage"
+              sh "ls -la ./phpdox"
+              sh "ls -la ./api"
+              echo "build artefacts ..."
+            }
+          },
+          "report2": {
+            node ("ant") {    
+              echo "unstash result  data ..."
+              unstash "api"
+              echo "publish report ..."
+              publishHTML (target: [
+                  allowMissing: false,
+                  alwaysLinkToLastBuild: false,
+                  keepAll: true,
+                  reportDir: 'api',
+                  reportFiles: 'index.html',
+                  reportName: "API Documentation (phpdox)"
+              ])          
+              deleteDir()
+            }
+          },
+        ) 
       }
     }
   }
