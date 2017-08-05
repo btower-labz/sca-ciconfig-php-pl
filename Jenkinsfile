@@ -132,12 +132,9 @@ pipeline {
               sh 'ant phpmd-xml'
               dir('build')
               {
-                sh 'ls -la'
                 stash name: 'phpmd.log', includes: 'phpmd.log'
                 stash name: 'phpmd.xml', includes: 'phpmd.xml'
               }
-              // TODO: move it to parallel (xmlstarlet)
-              // TODO: set threshholds
               step([
                 $class: 'PmdPublisher',
                 pattern: '**/build/phpmd.xml', 
