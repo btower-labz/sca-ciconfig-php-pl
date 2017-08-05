@@ -298,7 +298,7 @@ pipeline {
             node ("sca") {
               unstash "source"
               unstash "phpmd.xml"
-              unstach "build.xml
+              unstash "build.xml"
               sh "ls -la"
               sh "pwd"
               step([
