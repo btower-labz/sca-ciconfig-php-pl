@@ -118,12 +118,7 @@ pipeline {
                 stash name: 'phpmd.xml', includes: 'phpmd.xml'
               }
               // TODO: move it to parallel (xmlstarlet)
-              step([
-                $class: 'PmdPublisher',
-                pattern: '**/build/phpmd.xml', 
-                unstableTotalAll: '0', 
-                usePreviousBuildAsReference: true
-              ])
+              pmd canRunOnFailed: true, pattern: '**/build/phpmd.xml', unstableTotalAll: '0', usePreviousBuildAsReference: true
               deleteDir()
             }
           },
