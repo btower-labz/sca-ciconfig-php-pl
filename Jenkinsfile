@@ -19,6 +19,7 @@ pipeline {
           }
           dir("source"){
             git url: "https://github.com/slimphp/Slim", branch: "3.x", changelog: true, poll: true
+            sh "cp ./Slim/Route.php ./Slim/Route2.php"
             stash name: "source", excludes: "example/"
           }
           deleteDir()
@@ -333,6 +334,23 @@ pipeline {
             }
           },
           */
+          "coverage": {
+            node ("sca") {
+              dir("coverage")
+              {
+                unstash "coverage"
+              }
+              unstash "clover.xml'"
+              step([
+                $class: 'CloverPublisher',
+                cloverReportDir: 'coverage',
+                cloverReportFileName: 'clover.xml',
+                healthyTarget: [methodCoverage: 70, conditionalCoverage: 80, statementCoverage: 80], // optional, default is: method=70, conditional=80, statement=80
+                unhealthyTarget: [methodCoverage: 50, conditionalCoverage: 50, statementCoverage: 50], // optional, default is none
+                failingTarget: [methodCoverage: 0, conditionalCoverage: 0, statementCoverage: 0]     // optional, default is none
+              ])          
+            }
+          },          
           "phpcpd": {
             node ("sca") {
               unstash "source"
@@ -341,7 +359,9 @@ pipeline {
                 $class: 'DryPublisher',
                 pattern: '**/phpcpd.xml', 
                 unstableTotalAll: '0', 
-                usePreviousBuildAsReference: true
+                usePreviousBuildAsReference: true,
+                highThreshold : 50,
+                normalThreshold : 25
               ])
             }
           },          
