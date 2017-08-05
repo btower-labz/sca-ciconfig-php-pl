@@ -260,6 +260,7 @@ pipeline {
           },
           "warnings": {
             node ("php&&ant") {
+              unstash "lint-source.log"
               step([
                 $class: 'WarningsPublisher',
                 canComputeNew: true,
@@ -269,7 +270,7 @@ pipeline {
                 healthy: '',
                 includePattern: '',
                 messagesPattern: '',
-                parserConfigurations: [[parserName: 'PHP Runtime']], unHealthy: ''
+                parserConfigurations: [[parserName: 'PHP Runtime', pattern: 'lint-source.log']], unHealthy: ''
               ])
             }
           },
