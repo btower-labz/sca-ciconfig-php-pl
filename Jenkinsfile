@@ -285,6 +285,17 @@ pipeline {
               ])
             }
           },          
+          "phpmd": {
+            node ("sca") {
+              unstash "phpmd.xml"
+              step([
+                $class: 'PmdReporter',
+                pattern: '**/phpmd.xml', 
+                unstableTotalAll: '0', 
+                usePreviousBuildAsReference: true
+              ])
+            }
+          },          
           "phpdox": {
             node ("ant") {    
               dir("phpdox")
