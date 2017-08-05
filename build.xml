@@ -119,29 +119,50 @@
 </target>
 
   
-<target name="phpmd-txt" unless="phpmd-txt.done" description="">
-   <record name="${basedir}/${bldpath}/phpmd.txt" action="start" append="false" />
-  <exec executable="${phpmd}" taskname="phpmd">
-     <arg path="${basedir}/${srcpath}" />
-     <arg value="text" />
-     <arg value="codesize" />
+  <target name="phpmd-txt" unless="phpmd-txt.done" description="">
+    <record name="${basedir}/${bldpath}/phpmd.txt" action="start" append="false" />
+    <exec executable="${phpmd}" taskname="phpmd">
+      <arg path="${srcpath}" />
+      <arg value="text" />
+      <arg value="codesize" />
+      <arg value="--suffixes" />
+      <arg value="php,phtml" />
+      <arg value="--ignore-violations-on-exit" />
     </exec>
     <record name="${basedir}/${bldpath}/phpmd.txt" action="stop" />
     <property name="phpmd-txt.done" value="true"/>
-</target>
+  </target>
 
-  
 <target name="phpmd-xml" unless="phpmd-xml.done" description="">
    <record name="${basedir}/${bldpath}/phpmd.log" action="start" append="false" />
   <exec executable="${phpmd}" taskname="phpmd">
-     <arg path="${basedir}/${srcpath}" />
+     <arg path="${srcpath}" />
      <arg value="xml" />
      <arg value="codesize" />
      <arg value="--reportfile" />
      <arg path="${basedir}/${bldpath}/phpmd.xml" />
+      <arg value="--suffixes" />
+      <arg value="php,phtml" />
+      <arg value="--ignore-violations-on-exit" />
     </exec>
     <property name="phpmd-xml.done" value="true"/>
    <record name="${basedir}/${bldpath}/phpmd.log" action="start" append="false" />
+</target>
+
+<target name="phpmd-html" unless="phpmd-html.done" description="">
+   <record name="${basedir}/${bldpath}/phpmd-html.log" action="start" append="false" />
+  <exec executable="${phpmd}" taskname="phpmd">
+     <arg path="${srcpath}" />
+     <arg value="html" />
+     <arg value="codesize,cleancode,controversial,design,naming,unusedcode" />
+     <arg value="--reportfile" />
+     <arg path="${basedir}/${bldpath}/phpmd.html" />
+      <arg value="--suffixes" />
+      <arg value="php,phtml" />
+      <arg value="--ignore-violations-on-exit" />
+    </exec>
+    <property name="phpmd-html.done" value="true"/>
+   <record name="${basedir}/${bldpath}/phpmd-html.log" action="start" append="false" />
 </target>
 
 <target name="phpcs-txt" unless="phpcs-txt.done" description="">

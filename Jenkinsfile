@@ -118,6 +118,20 @@ pipeline {
               deleteDir()
             }
           },
+          "phpmd-html": {
+            node ("phpmd&&ant") {
+              unstash "source"
+              unstash "build.xml"
+              sh "ant prepare"
+              sh "ant phpmd-html"
+              dir("build")
+              {
+                stash name: "phpmd-html.log", includes: "phpmd-html.log"
+                stash name: "phpmd.html", includes: "phpmd.html"
+              }              
+              deleteDir()
+            }
+          },
           "phpcs-txt": {
             node ("phpcs&&ant") {
               unstash "source"
@@ -238,6 +252,8 @@ pipeline {
                 unstash "phpmd.log"
                 unstash "phpmd.txt"
                 unstash "phpmd.xml"
+                unstash "phpmd.html"
+                unstash "phpmd-html.log"
                 unstash "phpcs.log"
                 unstash "phpcs.txt"
                 unstash "checkstyle.xml"
@@ -299,22 +315,19 @@ pipeline {
               unstash "source"
               unstash "phpmd.xml"
               unstash "build.xml"
-              sh "ls -la"
-              sh "pwd"
               step([
                 $class: 'PmdPublisher',
                 pattern: '**/phpmd.xml', 
                 unstableTotalAll: '0', 
                 usePreviousBuildAsReference: true
               ])
-              // deleteDir()
+              deleteDir()
             }
           },          
           "phpcpd": {
             node ("sca") {
               unstash "source"
               unstash "phpcpd.xml"
-              sh "ls -la"
               step([
                 $class: 'DryPublisher',
                 pattern: '**/phpcpd.xml', 
