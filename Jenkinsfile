@@ -114,7 +114,13 @@ pipeline {
                 sh "ls -la"
                 stash name: "phpmd.log", includes: "phpmd.log"
                 stash name: "phpmd.xml", includes: "phpmd.xml"
-              }              
+              }
+              step([
+                $class: 'PmdPublisher',
+                pattern: '**/build/phpmd.xml', 
+                unstableTotalAll: '0', 
+                usePreviousBuildAsReference: true
+              ])
               deleteDir()
             }
           },
@@ -310,6 +316,8 @@ pipeline {
               ])
             }
           },          
+          // TODO: to use it here one need to xmlstarlet phpmd.xml to remove absolute path
+          /*
           "phpmd": {
             node ("sca") {
               unstash "source"
@@ -323,7 +331,8 @@ pipeline {
               ])
               deleteDir()
             }
-          },          
+          },
+          */
           "phpcpd": {
             node ("sca") {
               unstash "source"
