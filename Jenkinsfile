@@ -241,12 +241,19 @@ pipeline {
               sh "ant prepare"
               sh "ant phpdox"
               echo "save results ..."
+              sh "ls -la"
+              sh "ls -la ./build "
+              sh "ls -la ./build/api"
+              sh "ls -la ./build/phpdox"
               dir("build")
               {
+                echo "stash log"
                 stash name: "phpdox.log", includes: "phpdox.log"
+                echo "stash dox"
                 /* dir("phpdox") {
                  stash name: "phpdox"
                 }*/
+                echo "stash api"
                 dir("api") {
                  stash name: "api"
                 }
