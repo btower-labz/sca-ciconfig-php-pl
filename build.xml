@@ -13,11 +13,11 @@
 <property name="phpcpd"  value="phpcpd"/>
 <property name="phpcs"  value="phpcs"/>
 <!-- build path relative to  ${basedir} -->
-<property name="bldpath" valur="build"
+<property name="bldpath" value="build" />
 <!-- source code path relative to  ${basedir} -->
-<property name="srcpath"  value="Slim"/>
+<property name="srcpath"  value="Slim" />
 <!-- tests path path relative to  ${basedir} -->
-<property name="tstpath"  value="tests"/>
+<property name="tstpath"  value="tests" />
 
 <target name="info" description="Show environment information">
   <echo message="ANT basedir: ${basedir}"/>
