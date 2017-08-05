@@ -136,9 +136,9 @@ pipeline {
                 stash name: 'phpmd.log', includes: 'phpmd.log'
                 stash name: 'phpmd.xml', includes: 'phpmd.xml'
               }
+              pmd canRunOnFailed: true, pattern: '**/build/phpmd.xml'
               // TODO: move it to parallel (xmlstarlet)
               // TODO: set threshholds
-              pmd canRunOnFailed: true, pattern: '**/build/phpmd.xml', usePreviousBuildAsReference: true
               deleteDir()
             }
           },
