@@ -290,6 +290,7 @@ pipeline {
           },          
           "phpmd": {
             node ("sca") {
+              unstash "source"
               unstash "phpmd.xml"
               step([
                 $class: 'PmdPublisher',
@@ -297,6 +298,7 @@ pipeline {
                 unstableTotalAll: '0', 
                 usePreviousBuildAsReference: true
               ])
+              deleteDir()
             }
           },          
           "phpcpd": {
