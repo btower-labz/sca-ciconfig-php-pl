@@ -221,17 +221,17 @@
 </target>
 
   <target name="phpunit" unless="phpunit.done" description="">
-   <record name="${basedir}/${bldpath}/phpunit.log" action="start" append="false" />
-<exec executable="${composer}" taskname="composer" dir="./">
-   <arg value="install"/>
-</exec>
-<exec executable="${phpunit}" failonerror="true" taskname="phpunit" dir="./">
-   <arg value="--configuration"/>
-   <arg path="${basedir}/phpunit.xml"/>
-</exec>
-   <record name="${basedir}/${bldpath}/phpunit.log" action="stop" />
-  <property name="phpunit.done" value="true"/>
-</target>
+    <record name="${basedir}/${bldpath}/phpunit.log" action="start" append="false" />
+    <exec executable="${composer}" taskname="composer" dir="./">
+      <arg value="install"/>
+    </exec>
+    <exec executable="${phpunit}" failonerror="true" taskname="phpunit" dir="./">
+      <arg value="--configuration"/>
+      <arg path="${basedir}/phpunit.xml"/>
+    </exec>
+    <record name="${basedir}/${bldpath}/phpunit.log" action="stop" />
+    <property name="phpunit.done" value="true"/>
+  </target>
 
 <target name="phpdox" unless="phpdox.done" description="">
    <record name="${basedir}/${bldpath}/phpdox.log" action="start" append="false" />

@@ -246,30 +246,39 @@ pipeline {
             node ("ant") {
               echo "unstash result  data ..."
               dir("output"){
+                // php-lint
                 unstash "lint-source.log"
                 unstash "lint-tests.log"
+                // php-loc
                 unstash "phploc.log"
                 unstash "phploc.csv"
                 unstash "phploc.xml"
                 unstash "phploc.txt"
+                // php-depend
                 unstash "jdepend.xml"
                 unstash "pdepend.log"
                 unstash "dependencies.svg"
                 unstash "overview-pyramid.svg"
+                // php-md
                 unstash "phpmd.log"
                 unstash "phpmd.txt"
                 unstash "phpmd.xml"
                 unstash "phpmd.html"
                 unstash "phpmd-html.log"
+                // php-cs
                 unstash "phpcs.log"
                 unstash "phpcs.txt"
                 unstash "checkstyle.xml"
+                // php-cpd
                 unstash "phpcpd.log"
                 unstash "phpcpd.txt"
                 unstash "phpcpd.xml"
+                // php-unit
                 unstash "clover.xml"
                 unstash "crap4j.xml"
                 unstash "junit.xml"
+                unstash "phpunit.log"
+                // php-dox
                 unstash "phpdox.log"
               }
               dir("coverage"){
@@ -284,10 +293,12 @@ pipeline {
               {
                 unstash "api"
               }
+              archiveArtifacts artifacts: "output/lint-source.*", fingerprint: true
               archiveArtifacts artifacts: "output/phpmd.*", fingerprint: true
               archiveArtifacts artifacts: "output/phpcs.*,output/checkstyle.xml", fingerprint: true
               archiveArtifacts artifacts: "output/phpcpd.*", fingerprint: true
               archiveArtifacts artifacts: "output/phploc.*", fingerprint: true
+              archiveArtifacts artifacts: "output/phpunit.log", fingerprint: true
             }
           },
           "warnings": {
