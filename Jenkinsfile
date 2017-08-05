@@ -19,7 +19,7 @@ pipeline {
           }
           dir("source"){
             git url: "https://github.com/slimphp/Slim", branch: "3.x", changelog: true, poll: true
-            stash excludes: 'example/', name: 'source'
+            stash name: "source", excludes: "example/"
           }
           deleteDir()
         }
@@ -292,6 +292,7 @@ pipeline {
             node ("sca") {
               unstash "source"
               unstash "phpmd.xml"
+              sh "ls -la"
               step([
                 $class: 'PmdPublisher',
                 pattern: '**/phpmd.xml', 
@@ -303,7 +304,9 @@ pipeline {
           },          
           "phpcpd": {
             node ("sca") {
+              unstash "source"
               unstash "phpcpd.xml"
+              sh "ls -la"
               step([
                 $class: 'DryPublisher',
                 pattern: '**/phpcpd.xml', 
