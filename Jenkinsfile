@@ -55,7 +55,7 @@ pipeline {
       steps {
         parallel (
           "phploc-txt": {
-            node ("phploc&&ant") {
+            node ("php&&ant") {
               echo "fetch from local scm ..."
               unstash "source"
               unstash "build.xml"
@@ -71,7 +71,7 @@ pipeline {
             }
           },
           "phploc-xml": {
-            node ("phploc&&ant") {
+            node ("php&&ant") {
               echo "fetch from local scm ..."
               unstash "source"
               unstash "build.xml"
@@ -88,7 +88,7 @@ pipeline {
             }
           },
           "pdepend-xml": {
-            node ("phpdepend&&ant") {
+            node ("pdepend&&ant") {
               echo "fetch from local scm ..."
               unstash "source"
               unstash "build.xml"
