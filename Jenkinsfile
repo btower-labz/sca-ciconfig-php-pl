@@ -224,28 +224,31 @@ pipeline {
           "archive": {
             node ("ant") {
               echo "unstash result  data ..."
-              unstash "lint-source.log"
-              unstash "lint-tests.log"
-              unstash "phploc.log"
-              unstash "phploc.csv"
-              unstash "phploc.xml"
-              unstash "phploc.txt"
-              unstash "jdepend.xml"
-              unstash "pdepend.log"
-              unstash "dependencies.svg"
-              unstash "overview-pyramid.svg"
-              unstash "phpmd.log"
-              unstash "phpmd.txt"
-              unstash "phpmd.xml"
-              unstash "phpcs.log"
-              unstash "phpcs.txt"
-              unstash "checkstyle.xml"
-              unstash "phpcpd.log"
-              unstash "phpcpd.txt"
-              unstash "phpcpd.xml"
-              unstash "clover.xml"
-              unstash "crap4j.xml"
-              unstash "junit.xml"
+              dir("output"){
+                unstash "lint-source.log"
+                unstash "lint-tests.log"
+                unstash "phploc.log"
+                unstash "phploc.csv"
+                unstash "phploc.xml"
+                unstash "phploc.txt"
+                unstash "jdepend.xml"
+                unstash "pdepend.log"
+                unstash "dependencies.svg"
+                unstash "overview-pyramid.svg"
+                unstash "phpmd.log"
+                unstash "phpmd.txt"
+                unstash "phpmd.xml"
+                unstash "phpcs.log"
+                unstash "phpcs.txt"
+                unstash "checkstyle.xml"
+                unstash "phpcpd.log"
+                unstash "phpcpd.txt"
+                unstash "phpcpd.xml"
+                unstash "clover.xml"
+                unstash "crap4j.xml"
+                unstash "junit.xml"
+                unstash "phpdox.log"
+              }
               dir("coverage"){
                 unstash "coverage"
               }
@@ -258,7 +261,10 @@ pipeline {
               {
                 unstash "api"
               }
-              unstash "phpdox.log"
+              archiveArtifacts artifacts: "output/phpmd.*", fingerprint: true
+              archiveArtifacts artifacts: "output/phpcs.*,output/checkstyle.xml", fingerprint: true
+              archiveArtifacts artifacts: "output/phpcpd.*", fingerprint: true
+              archiveArtifacts artifacts: "output/phploc.*", fingerprint: true
             }
           },
           "warnings": {
@@ -292,7 +298,9 @@ pipeline {
             node ("sca") {
               unstash "source"
               unstash "phpmd.xml"
+              unstach "build.xml
               sh "ls -la"
+              sh "pwd"
               step([
                 $class: 'PmdPublisher',
                 pattern: '**/phpmd.xml', 
