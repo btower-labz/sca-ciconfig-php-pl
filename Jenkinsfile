@@ -224,6 +224,7 @@ pipeline {
               }
               
               // TODO: move parallel
+              // FIXME: wount work as expected. cannot resolve php packages. Use CloverPHPPublisher when it will  be ready
               step([
                 $class: 'CloverPublisher',
                 cloverReportDir: './build',
@@ -231,7 +232,7 @@ pipeline {
                 healthyTarget: [methodCoverage: 70, conditionalCoverage: 80, statementCoverage: 80], // optional, default is: method=70, conditional=80, statement=80
                 unhealthyTarget: [methodCoverage: 50, conditionalCoverage: 50, statementCoverage: 50], // optional, default is none
                 failingTarget: [methodCoverage: 0, conditionalCoverage: 0, statementCoverage: 0]     // optional, default is none
-              ])          
+              ])
               
               deleteDir()
             }
@@ -338,6 +339,18 @@ pipeline {
               ])
             }
           },
+          
+          'junit': {
+            node ('sca') {
+              unstash 'junit.xml'
+              step([
+                  $class: 'XUnitBuilder',
+                  thresholds: [[$class: 'FailedThreshold', unstableThreshold: '1']],
+                  tools: [[$class: 'PHPUnitType', pattern: '**/junit.xml']]
+              ])          
+            }
+          },          
+          
           'checkstyle': {
             node ('sca') {
               unstash 'checkstyle.xml'
