@@ -250,9 +250,9 @@ pipeline {
                 echo "stash log"
                 stash name: "phpdox.log", includes: "phpdox.log"
                 echo "stash dox"
-                /* dir("phpdox") {
+                dir("phpdox") {
                  stash name: "phpdox"
-                }*/
+                }
                 echo "stash api"
                 dir("api") {
                  stash name: "api"
@@ -317,7 +317,14 @@ pipeline {
           "report2": {
             node ("ant") {    
               echo "unstash result  data ..."
-              unstash "api"
+              dir("phpdox")
+              {
+                unstash "phpdox"
+              }
+              dir("api")
+              {
+                unstash "api"
+              }
               echo "publish report ..."
               publishHTML (target: [
                   allowMissing: false,
