@@ -197,6 +197,9 @@
 <target name="phpcpd-txt" unless="phpcpd-txt.done" description="">
    <record name="${basedir}/${bldpath}/phpcpd.txt" action="start" append="false" />
   <exec executable="${phpcpd}" taskname="phpcpd">
+   <arg value="--fuzzy" />
+   <arg value="--no-interaction" />
+   <arg value="--no-ansi" />
    <arg path="${basedir}/${srcpath}" />
   </exec>
    <record name="${basedir}/${bldpath}/phpcpd.txt" action="stop" />
@@ -206,6 +209,9 @@
   <target name="phpcpd-xml" unless="phpcpd-xml.done" description="">
    <record name="${basedir}/${bldpath}/phpcpd.log" action="start" append="false" />
   <exec executable="${phpcpd}" taskname="phpcpd">
+   <arg value="--fuzzy" />
+   <arg value="--no-interaction" />
+   <arg value="--no-ansi" />
    <arg value="--log-pmd" />
    <arg path="${basedir}/${bldpath}/phpcpd.xml" />
    <arg path="${basedir}/${srcpath}" />
