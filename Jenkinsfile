@@ -1,4 +1,5 @@
 // TODO: https://github.com/phpstan/phpstan + extensions
+// TODO: https://github.com/sebastianbergmann/phpdcd
 pipeline {
   agent none
   stages {
@@ -346,7 +347,7 @@ pipeline {
               step([
                   $class: 'XUnitBuilder',
                   thresholds: [[$class: 'FailedThreshold', unstableThreshold: '1']],
-                  tools: [[$class: 'PHPUnitType', pattern: '**/junit.xml']]
+                  tools: [[$class: 'JUnitType', pattern: '**/junit.xml']]
               ])          
             }
           },          
