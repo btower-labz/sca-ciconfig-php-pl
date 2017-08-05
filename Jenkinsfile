@@ -116,6 +116,7 @@ pipeline {
                 stash name: 'phpmd.log', includes: 'phpmd.log'
                 stash name: 'phpmd.xml', includes: 'phpmd.xml'
               }
+              // TODO: move it to parallel (xmlstarlet)
               step([
                 $class: 'PmdPublisher',
                 pattern: '**/build/phpmd.xml', 
@@ -191,7 +192,16 @@ pipeline {
               {
                 stash name: 'phpcpd.log', includes: 'phpcpd.log'
                 stash name: 'phpcpd.xml', includes: 'phpcpd.xml'
-              }              
+              }
+              // TODO: move it to parralel (xmlstarlet)
+              step([
+                $class: 'DryPublisher',
+                pattern: '**/build/phpcpd.xml', 
+                unstableTotalAll: '0', 
+                usePreviousBuildAsReference: true,
+                highThreshold : 50,
+                normalThreshold : 25
+              ])
               deleteDir()
             }
           },
@@ -347,41 +357,36 @@ pipeline {
           */
           'coverage': {
             node ('sca') {
-              dir('coverage')
-              {
-                unstash 'coverage'
-              }
               unstash 'clover.xml'
               step([
                 $class: 'CloverPublisher',
-                cloverReportDir: 'coverage',
+                cloverReportDir: './',
                 cloverReportFileName: 'clover.xml',
                 healthyTarget: [methodCoverage: 70, conditionalCoverage: 80, statementCoverage: 80], // optional, default is: method=70, conditional=80, statement=80
                 unhealthyTarget: [methodCoverage: 50, conditionalCoverage: 50, statementCoverage: 50], // optional, default is none
                 failingTarget: [methodCoverage: 0, conditionalCoverage: 0, statementCoverage: 0]     // optional, default is none
               ])          
             }
-          },          
+          }, 
+          // TODO: cannot run here. use xmlstarlet to fix xml
+          /*
           'phpcpd': {
             node ('sca') {
               unstash 'source'
               unstash 'phpcpd.xml'
               step([
                 $class: 'DryPublisher',
-                pattern: '**/phpcpd.xml', 
+                pattern: ' * * / phpcpd.xml', 
                 unstableTotalAll: '0', 
                 usePreviousBuildAsReference: true,
                 highThreshold : 50,
                 normalThreshold : 25
               ])
             }
-          },          
+          },
+          */          
           'phpdox': {
             node ('ant') {    
-              dir('phpdox')
-              {
-                unstash 'phpdox'
-              }
               dir('api')
               {
                 unstash 'api'
@@ -393,6 +398,23 @@ pipeline {
                   reportDir: 'api',
                   reportFiles: 'index.html',
                   reportName: 'API Documentation (phpdox)'
+              ])          
+              deleteDir()
+            }
+          },
+          'coveragehtml': {
+            node ('ant') {    
+              dir('coverage')
+              {
+                unstash 'coverage'
+              }
+              publishHTML (target: [
+                  allowMissing: false,
+                  alwaysLinkToLastBuild: false,
+                  keepAll: true,
+                  reportDir: 'coverage',
+                  reportFiles: 'index.html',
+                  reportName: 'Unit Test Coverage (cloverphp)'
               ])          
               deleteDir()
             }
