@@ -289,8 +289,19 @@ pipeline {
             node ("sca") {
               unstash "phpmd.xml"
               step([
-                $class: 'PmdReporter',
+                $class: 'PmdPublisher',
                 pattern: '**/phpmd.xml', 
+                unstableTotalAll: '0', 
+                usePreviousBuildAsReference: true
+              ])
+            }
+          },          
+          "phpcpd": {
+            node ("sca") {
+              unstash "phpcpd.xml"
+              step([
+                $class: 'DryPublisher',
+                pattern: '**/phpcpd.xml', 
                 unstableTotalAll: '0', 
                 usePreviousBuildAsReference: true
               ])
