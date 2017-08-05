@@ -124,6 +124,26 @@ pipeline {
               deleteDir()
             }
           },
+          'phpmd-xml': {
+            node ('phpmd&&ant') {
+              unstash 'source'
+              unstash 'build.xml'
+              sh 'ant prepare'
+              sh 'ant phpmd-xml'
+              dir('build')
+              {
+                stash name: 'phpmd.log', includes: 'phpmd.log'
+                stash name: 'phpmd.xml', includes: 'phpmd.xml'
+              }
+              step([
+                $class: 'PmdPublisher',
+                pattern: '**/build/phpmd.xml', 
+                unstableTotalAll: '0', 
+                usePreviousBuildAsReference: true
+              ])
+              deleteDir()
+            }
+          },
           'phpmd-html': {
             node ('phpmd&&ant') {
               unstash 'source'
@@ -192,8 +212,7 @@ pipeline {
                 stash name: 'phpcpd.xml', includes: 'phpcpd.xml'
               }
               // TODO: move it to parralel (xmlstarlet)
-              dry canRunOnFailed: true, pattern: '**/build/phpcpd.xml', unstableTotalAll: '0', usePreviousBuildAsReference: true, highThreshold : 50, normalThreshold : 25
-              /*
+              // dry canRunOnFailed: true, pattern: '**/build/phpcpd.xml', unstableTotalAll: '0', usePreviousBuildAsReference: true, highThreshold : 50, normalThreshold : 25
               step([
                 $class: 'DryPublisher',
                 pattern:  * * / build/phpcpd.xml', 
@@ -202,7 +221,6 @@ pipeline {
                 highThreshold : 50,
                 normalThreshold : 25
               ])
-              */
               deleteDir()
             }
           },
