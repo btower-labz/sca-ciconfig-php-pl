@@ -259,7 +259,7 @@ pipeline {
             }
           },
           "warnings": {
-            node ("php&&ant") {
+            node ("sca") {
               unstash "lint-source.log"
               step([
                 $class: 'WarningsPublisher',
@@ -274,6 +274,17 @@ pipeline {
               ])
             }
           },
+          "checkstyle": {
+            node ("sca") {
+              unstash "checkstyle.xml"
+              step([
+                $class: 'CheckStylePublisher',
+                pattern: '**/checkstyle.xml', 
+                unstableTotalAll: '0', 
+                usePreviousBuildAsReference: true
+              ])
+            }
+          },          
           "phpdox": {
             node ("ant") {    
               dir("phpdox")
