@@ -298,7 +298,7 @@ pipeline {
                 unstableTotalAll: '0', 
                 usePreviousBuildAsReference: true
               ])
-              deleteDir()
+              // deleteDir()
             }
           },          
           "phpcpd": {
