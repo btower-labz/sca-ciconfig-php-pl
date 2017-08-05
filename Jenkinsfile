@@ -124,26 +124,6 @@ pipeline {
               deleteDir()
             }
           },
-          'phpmd-xml': {
-            node ('phpmd&&ant') {
-              unstash 'source'
-              unstash 'build.xml'
-              sh 'ant prepare'
-              sh 'ant phpmd-xml'
-              dir('build')
-              {
-                stash name: 'phpmd.log', includes: 'phpmd.log'
-                stash name: 'phpmd.xml', includes: 'phpmd.xml'
-              }
-              step([
-                $class: 'PmdPublisher',
-                pattern: '**/build/phpmd.xml', 
-                unstableTotalAll: '0', 
-                usePreviousBuildAsReference: true
-              ])
-              deleteDir()
-            }
-          },
           'phpmd-html': {
             node ('phpmd&&ant') {
               unstash 'source'
