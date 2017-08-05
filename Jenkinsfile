@@ -55,9 +55,9 @@ pipeline {
               step([
                 $class: 'TasksPublisher',
                 pattern:  '**/*.php',
-                high: "FIXME, XXX, BUG",
-                normal: "TODO",
-                low: "LATER",
+                high: 'FIXME, XXX, BUG',
+                normal: 'TODO',
+                low: 'LATER',
                 ignoreCase: true,
                 asRegexp: false,
                 unstableTotalAll: '0', 
@@ -141,7 +141,7 @@ pipeline {
               /*
               step([
                 $class: 'PmdPublisher',
-                pattern: '**/build/phpmd.xml', 
+                pattern: ' * * /build/phpmd.xml', 
                 unstableTotalAll: '0', 
                 usePreviousBuildAsReference: true
               ])
