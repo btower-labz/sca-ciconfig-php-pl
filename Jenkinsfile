@@ -190,14 +190,17 @@ pipeline {
                 stash name: 'phpcpd.xml', includes: 'phpcpd.xml'
               }
               // TODO: move it to parralel (xmlstarlet)
+              dry canRunOnFailed: true, pattern: '**/build/phpcpd.xml', unstableTotalAll: '0', usePreviousBuildAsReference: true, highThreshold : 50, normalThreshold : 25
+              /*
               step([
                 $class: 'DryPublisher',
-                pattern: '**/build/phpcpd.xml', 
+                pattern:  * * / build/phpcpd.xml', 
                 unstableTotalAll: '0', 
                 usePreviousBuildAsReference: true,
                 highThreshold : 50,
                 normalThreshold : 25
               ])
+              */
               deleteDir()
             }
           },
@@ -336,13 +339,14 @@ pipeline {
             }
           },
           
+          // TODO: It works, but we are to use PHPUnitTool
           'junit': {
             node ('sca') {
               unstash 'junit.xml'
               step([
                   $class: 'XUnitBuilder',
                   thresholds: [[$class: 'FailedThreshold', unstableThreshold: '1']],
-                  tools: [[$class: 'PHPUnit', pattern: '**/junit.xml']]
+                  tools: [[$class: 'JUnitType', pattern: '**/junit.xml']]
               ])          
             }
           },          
