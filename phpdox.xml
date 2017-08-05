@@ -1,5 +1,5 @@
 <phpdox xmlns="http://xml.phpdox.net/config">
- <project name="Slim" source="source/Slim" workdir="build/phpdox">
+ <project name="Slim" source="Slim" workdir="build/phpdox">
   <collector publiconly="false">
    <include mask="*.php" />
   </collector>
