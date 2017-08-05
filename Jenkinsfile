@@ -296,12 +296,10 @@ pipeline {
                 unstash "coverage"
               }
               unstash "phpunit.log"
-              /*
               dir("phpdox")
               {
                 unstash "phpdox"
               }
-              */
               dir("api")
               {
                 unstash "api"
