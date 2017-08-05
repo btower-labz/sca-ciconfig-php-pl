@@ -325,7 +325,7 @@ pipeline {
               unstash "build.xml"
               step([
                 $class: 'PmdPublisher',
-                pattern: '**/phpmd.xml', 
+                pattern: '* * / phpmd.xml', 
                 unstableTotalAll: '0', 
                 usePreviousBuildAsReference: true
               ])
