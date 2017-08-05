@@ -2,6 +2,7 @@
 // TODO: https://github.com/sebastianbergmann/phpdcd
 // TODO: violations https://issues.jenkins-ci.org/browse/JENKINS-26039
 // TODO: https://wiki.jenkins.io/display/JENKINS/JDepend+Plugin
+// TODO: https://wiki.jenkins.io/display/JENKINS/OWASP+Dependency-Check+Plugin
 pipeline {
   agent none
   stages {
@@ -331,7 +332,7 @@ pipeline {
                 // php-depend
                 unstash 'dependencies.svg'
                 unstash 'overview-pyramid.svg'
-                unstash 'phpdepend.log'                
+                unstash 'pdepend.log'                
               }
               dir('coverage'){
                 unstash 'coverage'
