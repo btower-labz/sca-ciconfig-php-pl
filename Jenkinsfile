@@ -1,5 +1,7 @@
 // TODO: https://github.com/phpstan/phpstan + extensions
 // TODO: https://github.com/sebastianbergmann/phpdcd
+// TODO: violations https://issues.jenkins-ci.org/browse/JENKINS-26039
+// TODO: https://wiki.jenkins.io/display/JENKINS/JDepend+Plugin
 pipeline {
   agent none
   stages {
@@ -301,6 +303,10 @@ pipeline {
                 unstash 'phpunit.log'
                 // php-dox
                 unstash 'phpdox.log'
+                // php-depend
+                unstash 'dependencies.svg'
+                unstash 'overview-pyramid.svg'
+                unstash 'phpdepend.log'                
               }
               dir('coverage'){
                 unstash 'coverage'
@@ -320,6 +326,7 @@ pipeline {
               archiveArtifacts artifacts: 'output/phpcpd.*', fingerprint: true
               archiveArtifacts artifacts: 'output/phploc.*', fingerprint: true
               archiveArtifacts artifacts: 'output/clover.xml,output/phpunit.log', fingerprint: true
+              archiveArtifacts artifacts: 'output/dependencies.svg,output/overview-pyramid.svg', fingerprint: true
             }
           },
           'warnings': {
@@ -427,6 +434,26 @@ pipeline {
                   reportDir: 'api',
                   reportFiles: 'index.html',
                   reportName: 'API Documentation (phpdox)'
+              ])          
+              deleteDir()
+            }
+          },
+          // TODO: too ugly
+          'pdependhtml': {
+            node ('ant') {    
+              dir('pdepend')
+              {
+                unstash 'dependencies.svg'
+                unstash 'overview-pyramid.svg'
+                echo "<html><body><p><img src=\"dependencies.svg\" /></p><p><img src=\"overview-pyramid.svg\" /></p.</body></html>"
+              }
+              publishHTML (target: [
+                  allowMissing: false,
+                  alwaysLinkToLastBuild: false,
+                  keepAll: true,
+                  reportDir: 'pdepend',
+                  reportFiles: 'index.html',
+                  reportName: 'Unit Test Coverage (cloverphp)'
               ])          
               deleteDir()
             }

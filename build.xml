@@ -109,15 +109,16 @@
 <target name="pdepend-xml" unless="pdepend-xml.done" description="">
    <record name="${basedir}/${bldpath}/pdepend.log" action="start" append="false" />
   <exec executable="${pdepend}" taskname="pdepend">
+    <arg value="--dependency-xml=${basedir}/${bldpath}/pdepend.xml" />
      <arg value="--jdepend-xml=${basedir}/${bldpath}/jdepend.xml" />
      <arg value="--jdepend-chart=${basedir}/${bldpath}/dependencies.svg" />
      <arg value="--overview-pyramid=${basedir}/${bldpath}/overview-pyramid.svg" />
+     <arg value="--summary-xml=${basedir}/${bldpath}/pdepend-summary.xml" />
      <arg path="${basedir}/${srcpath}" />
     </exec>
    <record name="${basedir}/${bldpath}/pdepend.log" action="stop" />
     <property name="pdepend-xml.done" value="true"/>
 </target>
-
   
   <target name="phpmd-txt" unless="phpmd-txt.done" description="">
     <record name="${basedir}/${bldpath}/phpmd.txt" action="start" append="false" />
