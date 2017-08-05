@@ -312,6 +312,34 @@ pipeline {
               echo "build artefacts ..."
             }
           },
+          "warnings": {
+            node ("php&&ant") {
+              /*
+              step([
+                $class: 'WarningsPublisher',
+                canComputeNew: false,
+                canResolveRelativePaths: false,
+                defaultEncoding: '',
+                excludePattern: '',
+                healthy: '',
+                includePattern: '',
+                messagesPattern: '',
+                parserConfigurations: [[parserName: 'GNU Make + GNU C Compiler (gcc)', pattern: 'error_and_warnings.txt']], unHealthy: ''
+              ])
+              */
+              step([
+                $class: 'WarningsPublisher',
+                canComputeNew: true,
+                canResolveRelativePaths: false,
+                defaultEncoding: '',
+                excludePattern: '',
+                healthy: '',
+                includePattern: '',
+                messagesPattern: '',
+                parserConfigurations: [[parserName: 'PHP Runtime']], unHealthy: ''
+              ])
+            }
+          }
           "report2": {
             node ("ant") {    
               echo "unstash result  data ..."
