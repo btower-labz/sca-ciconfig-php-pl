@@ -1,3 +1,4 @@
+// TODO: https://github.com/phpstan/phpstan + extensions
 pipeline {
   agent none
   stages {
@@ -96,6 +97,7 @@ pipeline {
               sh "ant phpmd-txt"
               dir("build")
               {
+                sh "ls -la"
                 stash name: "phpmd.txt", includes: "phpmd.txt"
               }              
               deleteDir()
@@ -109,6 +111,7 @@ pipeline {
               sh "ant phpmd-xml"
               dir("build")
               {
+                sh "ls -la"
                 stash name: "phpmd.log", includes: "phpmd.log"
                 stash name: "phpmd.xml", includes: "phpmd.xml"
               }              

@@ -12,9 +12,12 @@
 <property name="composer" value="composer" />
 <property name="phpcpd"  value="phpcpd"/>
 <property name="phpcs"  value="phpcs"/>
-<property name="srcpath"  value="./Slim"/>
-<property name="tstpath"  value="./tests"/>
-
+<!-- build path relative to  ${basedir} -->
+<property name="bldpath" valur="build"
+<!-- source code path relative to  ${basedir} -->
+<property name="srcpath"  value="Slim"/>
+<!-- tests path path relative to  ${basedir} -->
+<property name="tstpath"  value="tests"/>
 
 <target name="info" description="Show environment information">
   <echo message="ANT basedir: ${basedir}"/>
@@ -37,161 +40,161 @@
 </target>
 
 <target name="prepare" unless="prepare.done" depends="clean" description="Prepare for build">
-  <mkdir dir="${basedir}/build"/>
-  <mkdir dir="${basedir}/build/api"/>
-  <mkdir dir="${basedir}/build/coverage"/>
-  <mkdir dir="${basedir}/build/phpdox"/>
+  <mkdir dir="${basedir}/${build}"/>
+  <mkdir dir="${basedir}/${build}/api"/>
+  <mkdir dir="${basedir}/${build}/coverage"/>
+  <mkdir dir="${basedir}/${build}/phpdox"/>
   <property name="prepare.done" value="true"/>
  </target>
   
 <target name="clean" unless="clean.done" description="Cleanup build artifacts">
-  <delete dir="${basedir}/build/api"/>
-  <delete dir="${basedir}/build/coverage"/>
-  <delete dir="${basedir}/build/phpdox"/>
-  <delete dir="${basedir}/build"/>
+  <delete dir="${basedir}/${build}/api"/>
+  <delete dir="${basedir}/${build}/coverage"/>
+  <delete dir="${basedir}/${build}/phpdox"/>
+  <delete dir="${basedir}/${build}"/>
   <property name="clean.done" value="true"/>
 </target>
  
  <target name="lint-source" unless="lint-source.done" description="Perform syntax check of sourcecode files">
- <record name="${basedir}/build/lint-source.log" action="start" append="false" />
+ <record name="${basedir}/${build}/lint-source.log" action="start" append="false" />
   <apply executable="${php}" taskname="lint">
     <arg value="-l" />
-      <fileset dir="${basedir}/Slim">
+      <fileset dir="${basedir}/${srcpath}">
         <include name="**/*.php" />
         <modified />
       </fileset>
   </apply>
- <record name="${basedir}/build/lint-source.log" action="stop" />
+ <record name="${basedir}/${build}/lint-source.log" action="stop" />
   <property name="lint-source.done" value="true"/>
 </target>
 
  <target name="lint-tests" unless="lint-tests.done" description="Perform syntax check of tests files">
- <record name="${basedir}/build/lint-tests.log" action="start" append="false" />
+ <record name="${basedir}/${build}/lint-tests.log" action="start" append="false" />
   <apply executable="php" taskname="lint">
     <arg value="-l" />
-      <fileset dir="${basedir}/tests">
+      <fileset dir="${basedir}/${tstpath}">
         <include name="**/*.php" />
         <modified />
       </fileset>
   </apply>
   <property name="lint-tests.done" value="true"/>
- <record name="${basedir}/build/lint-tests.log" action="stop" />
+ <record name="${basedir}/${build}/lint-tests.log" action="stop" />
 </target>
 
 <target name="phploc-txt" unless="phploc-txt.done" description="">
-   <record name="${basedir}/build/phploc.txt" action="start" append="false" />
+   <record name="${basedir}/${build}/phploc.txt" action="start" append="false" />
    <exec executable="${phploc}" taskname="phploc">
     <arg value="--count-tests" />
-    <arg path="${basedir}/tests" />
+    <arg path="${basedir}/${tstpath}" />
   </exec>
-   <record name="${basedir}/build/phploc.txt" action="stop" />
+   <record name="${basedir}/${build}/phploc.txt" action="stop" />
   <property name="phploc-txt.done" value="true"/>
 </target>
 
 <target name="phploc-xml" unless="phploc-xml.done" description="">
-   <record name="${basedir}/build/phploc.log" action="start" append="false" />
+   <record name="${basedir}/${build}/phploc.log" action="start" append="false" />
   <exec executable="${phploc}" taskname="phploc">
      <arg value="--count-tests" />
      <arg value="--log-csv" />
-     <arg path="${basedir}/build/phploc.csv" />
+     <arg path="${basedir}/${build}/phploc.csv" />
      <arg value="--log-xml" />
-     <arg path="${basedir}/build/phploc.xml" />
-     <arg path="${basedir}/Slim" />
-     <arg path="${basedir}/tests" />
+     <arg path="${basedir}/${build}/phploc.xml" />
+     <arg path="${basedir}/${srcpath}" />
+     <arg path="${basedir}/${tstpath}" />
     </exec>
-    <record name="${basedir}/build/phploc.log" action="stop" />
+    <record name="${basedir}/${build}/phploc.log" action="stop" />
     <property name="phploc-xml.done" value="true"/>
 </target>
   
 <target name="pdepend-xml" unless="pdepend-xml.done" description="">
-   <record name="${basedir}/build/pdepend.log" action="start" append="false" />
+   <record name="${basedir}/${build}/pdepend.log" action="start" append="false" />
   <exec executable="${pdepend}" taskname="pdepend">
-     <arg value="--jdepend-xml=${basedir}/build/jdepend.xml" />
-     <arg value="--jdepend-chart=${basedir}/build/dependencies.svg" />
-     <arg value="--overview-pyramid=${basedir}/build/overview-pyramid.svg" />
-     <arg path="${basedir}/Slim" />
+     <arg value="--jdepend-xml=${basedir}/${build}/jdepend.xml" />
+     <arg value="--jdepend-chart=${basedir}/${build}/dependencies.svg" />
+     <arg value="--overview-pyramid=${basedir}/${build}/overview-pyramid.svg" />
+     <arg path="${basedir}/${srcpath}" />
     </exec>
-   <record name="${basedir}/build/pdepend.log" action="stop" />
+   <record name="${basedir}/${build}/pdepend.log" action="stop" />
     <property name="pdepend-xml.done" value="true"/>
 </target>
 
   
 <target name="phpmd-txt" unless="phpmd-txt.done" description="">
-   <record name="${basedir}/build/phpmd.txt" action="start" append="false" />
+   <record name="${basedir}/${build}/phpmd.txt" action="start" append="false" />
   <exec executable="${phpmd}" taskname="phpmd">
-     <arg path="${basedir}/Slim" />
+     <arg path="${basedir}/${srcpath}" />
      <arg value="text" />
      <arg value="codesize" />
     </exec>
-    <record name="${basedir}/build/phpmd.txt" action="stop" />
+    <record name="${basedir}/${build}/phpmd.txt" action="stop" />
     <property name="phpmd-txt.done" value="true"/>
 </target>
 
   
 <target name="phpmd-xml" unless="phpmd-xml.done" description="">
-   <record name="${basedir}/build/phpmd.log" action="start" append="false" />
+   <record name="${basedir}/${build}/phpmd.log" action="start" append="false" />
   <exec executable="${phpmd}" taskname="phpmd">
-     <arg path="${basedir}/source/${SRC_DIR}" />
+     <arg path="${basedir}/${srcpath}" />
      <arg value="xml" />
      <arg value="codesize" />
      <arg value="--reportfile" />
-     <arg path="${basedir}/build/phpmd.xml" />
+     <arg path="${basedir}/${build}/phpmd.xml" />
     </exec>
     <property name="phpmd-xml.done" value="true"/>
-   <record name="${basedir}/build/phpmd.log" action="start" append="false" />
+   <record name="${basedir}/${build}/phpmd.log" action="start" append="false" />
 </target>
 
 <target name="phpcs-txt" unless="phpcs-txt.done" description="">
-   <record name="${basedir}/build/phpcs.txt" action="start" append="false" />
+   <record name="${basedir}/${build}/phpcs.txt" action="start" append="false" />
   <exec executable="${phpcs}" taskname="phpcs">
      <arg value="--standard=PSR2" />
      <arg value="--extensions=php" />
      <arg value="--ignore=autoload.php" />
-     <arg path="${basedir}/Slim" />
+     <arg path="${basedir}/${srcpath}" />
      <!-- arg path="${basedir}/tests" / -->
     </exec>
-     <record name="${basedir}/build/phpcs.txt" action="stop"/>
+     <record name="${basedir}/${build}/phpcs.txt" action="stop"/>
     <property name="phpcs-txt.done" value="true"/>
 </target>
 
   
 <target name="phpcs-xml" unless="phpcs-xml.done" description="">
-   <record name="${basedir}/build/phpcs.log" action="start" append="false" />
+   <record name="${basedir}/${build}/phpcs.log" action="start" append="false" />
 <exec executable="${phpcs}" output="/dev/null" taskname="phpcs">
    <arg value="--report=checkstyle" />
-   <arg value="--report-file=${basedir}/build/checkstyle.xml" />
+   <arg value="--report-file=${basedir}/${build}/checkstyle.xml" />
    <arg value="--standard=PSR2" />
    <arg value="--extensions=php" />
    <arg value="--ignore=autoload.php" />
-   <arg path="${basedir}/Slim" />
+   <arg path="${basedir}/${srcpath}" />
    <!-- arg path="${basedir}/tests" / -->
   </exec>
-     <record name="${basedir}/build/phpcs.log" action="stop"/>
+     <record name="${basedir}/${build}/phpcs.log" action="stop"/>
     <property name="phpcs-xml.done" value="true"/>
 </target>
 
 <target name="phpcpd-txt" unless="phpcpd-txt.done" description="">
-   <record name="${basedir}/build/phpcpd.txt" action="start" append="false" />
+   <record name="${basedir}/${build}/phpcpd.txt" action="start" append="false" />
   <exec executable="${phpcpd}" taskname="phpcpd">
-   <arg path="${basedir}/Slim" />
+   <arg path="${basedir}/${srcpath}" />
   </exec>
-   <record name="${basedir}/build/phpcpd.txt" action="stop" />
+   <record name="${basedir}/${build}/phpcpd.txt" action="stop" />
     <property name="phpcpd-txt.done" value="true"/>
 </target>
 
   <target name="phpcpd-xml" unless="phpcpd-xml.done" description="">
-   <record name="${basedir}/build/phpcpd.log" action="start" append="false" />
+   <record name="${basedir}/${build}/phpcpd.log" action="start" append="false" />
   <exec executable="${phpcpd}" taskname="phpcpd">
    <arg value="--log-pmd" />
-   <arg path="${basedir}/build/phpcpd.xml" />
-   <arg path="${basedir}/Slim" />
+   <arg path="${basedir}/${build}/phpcpd.xml" />
+   <arg path="${basedir}/${srcpath}" />
   </exec>
-   <record name="${basedir}/build/phpcpd.log" action="stop" />
+   <record name="${basedir}/${build}/phpcpd.log" action="stop" />
     <property name="phpcpd-xml.done" value="true"/>
 </target>
 
   <target name="phpunit" unless="phpunit.done" description="">
-   <record name="${basedir}/build/phpunit.log" action="start" append="false" />
+   <record name="${basedir}/${build}/phpunit.log" action="start" append="false" />
 <exec executable="${composer}" taskname="composer" dir="./">
    <arg value="install"/>
 </exec>
@@ -199,20 +202,18 @@
    <arg value="--configuration"/>
    <arg path="${basedir}/phpunit.xml"/>
 </exec>
-   <record name="${basedir}/build/phpunit.log" action="stop" />
+   <record name="${basedir}/${build}/phpunit.log" action="stop" />
   <property name="phpunit.done" value="true"/>
 </target>
 
-
 <target name="phpdox" unless="phpdox.done" description="">
-   <record name="${basedir}/build/phpdox.log" action="start" append="false" />
+   <record name="${basedir}/${build}/phpdox.log" action="start" append="false" />
 <exec executable="${phpdox}" dir="${basedir}" taskname="phpdox">
  <arg value="--file" />
  <arg path="${basedir}/phpdox.xml"/>
 </exec>
-   <record name="${basedir}/build/phpdox.log" action="stop" />
+   <record name="${basedir}/${build}/phpdox.log" action="stop" />
   <property name="phpdox.done" value="true"/>
 </target>
-
 
 </project>
