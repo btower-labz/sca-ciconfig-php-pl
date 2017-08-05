@@ -33,7 +33,7 @@ pipeline {
     }
     stage("syntax") {
       steps {
-        node("php" && "ant") {
+        node("php&&ant") {
           echo "fetch from local scm ..."
           unstash "source"
           unstash "build.xml"
@@ -55,7 +55,7 @@ pipeline {
       steps {
         parallel (
           "phploc-txt": {
-            node ("phploc" && "ant") {
+            node ("phploc&&ant") {
               echo "fetch from local scm ..."
               unstash "source"
               unstash "build.xml"
@@ -71,7 +71,7 @@ pipeline {
             }
           },
           "phploc-xml": {
-            node ("phploc" && "ant") {
+            node ("phploc&&ant") {
               echo "fetch from local scm ..."
               unstash "source"
               unstash "build.xml"
@@ -88,7 +88,7 @@ pipeline {
             }
           },
           "pdepend-xml": {
-            node ("phpdepend" && "ant") {
+            node ("phpdepend&&ant") {
               echo "fetch from local scm ..."
               unstash "source"
               unstash "build.xml"
@@ -107,7 +107,7 @@ pipeline {
             }
           },          
           "phpmd-txt": {
-            node ("phpmd" && "ant") {
+            node ("phpmd&&ant") {
               echo "fetch from local scm ..."
               unstash "source"
               unstash "build.xml"
@@ -123,7 +123,7 @@ pipeline {
             }
           },
           "phpmd-xml": {
-            node ("phpmd" && "ant") {
+            node ("phpmd&&ant") {
               echo "fetch from local scm ..."
               unstash "source"
               unstash "build.xml"
@@ -140,7 +140,7 @@ pipeline {
             }
           },
           "phpcs-txt": {
-            node ("phpcs" && "ant") {
+            node ("phpcs&&ant") {
               echo "fetch from local scm ..."
               unstash "source"
               unstash "build.xml"
@@ -157,7 +157,7 @@ pipeline {
             }
           },
           "phpcs-xml": {
-            node ("phpcs" && "ant") {
+            node ("phpcs&&ant") {
               echo "fetch from local scm ..."
               unstash "source"
               unstash "build.xml"
@@ -175,7 +175,7 @@ pipeline {
             }
           },
           "phpcpd-txt": {
-            node ("phpcpd" && "ant") {
+            node ("phpcpd&&ant") {
               echo "fetch from local scm ..."
               unstash "source"
               unstash "build.xml"
@@ -191,7 +191,7 @@ pipeline {
             }
           },
           "phpcpd-xml": {
-            node ("phpcpd" && "ant") {
+            node ("phpcpd&&ant") {
               echo "fetch from local scm ..."
               unstash "source"
               unstash "build.xml"
@@ -208,7 +208,7 @@ pipeline {
             }
           },
           "phpunit": {
-            node ("phpunit" && "ant") {
+            node ("phpunit&&ant") {
               echo "fetch from local scm ..."
               unstash "source"
               unstash "build.xml"
@@ -232,7 +232,7 @@ pipeline {
             }
           },
           "phpdox": {
-            node ("phpunit" && "ant") {
+            node ("phpunit&&ant") {
               echo "fetch from local scm ..."
               unstash "source"
               unstash "build.xml"
