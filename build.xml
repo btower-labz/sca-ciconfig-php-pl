@@ -199,6 +199,9 @@
   <exec executable="${phpcpd}" taskname="phpcpd">
    <arg value="--fuzzy" />
    <arg value="--no-interaction" />
+   <arg value="--min-lines=2" />
+   <arg value="--min-tokens=30" />
+   <arg value="--no-interaction" />
    <arg value="--no-ansi" />
    <arg path="${basedir}/${srcpath}" />
   </exec>
@@ -210,6 +213,9 @@
    <record name="${basedir}/${bldpath}/phpcpd.log" action="start" append="false" />
   <exec executable="${phpcpd}" taskname="phpcpd">
    <arg value="--fuzzy" />
+   <arg value="--no-interaction" />
+   <arg value="--min-lines=2" />
+   <arg value="--min-tokens=30" />
    <arg value="--no-interaction" />
    <arg value="--no-ansi" />
    <arg value="--log-pmd" />

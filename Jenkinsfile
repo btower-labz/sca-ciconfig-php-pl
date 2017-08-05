@@ -19,7 +19,7 @@ pipeline {
           }
           dir("source"){
             git url: "https://github.com/slimphp/Slim", branch: "3.x", changelog: true, poll: true
-            sh "cp ./Slim/Route.php ./Slim/Route2.php"
+            //sh "cp ./Slim/Route.php ./Slim/Route2.php"
             stash name: "source", excludes: "example/"
           }
           deleteDir()
