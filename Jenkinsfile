@@ -244,9 +244,9 @@ pipeline {
               dir("build")
               {
                 stash name: "phpdox.log", includes: "phpdox.log"
-                dir("phpdox") {
+                /* dir("phpdox") {
                  stash name: "phpdox"
-                }
+                }*/
                 dir("api") {
                  stash name: "api"
                 }
@@ -289,10 +289,12 @@ pipeline {
                 unstash "coverage"
               }
               unstash "phpunit.log"
+              /*
               dir("phpdox")
               {
                 unstash "phpdox"
               }
+              */
               dir("api")
               {
                 unstash "api"
