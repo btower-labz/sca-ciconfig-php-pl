@@ -1,3 +1,5 @@
+// TODO: Check this: https://plugins.jenkins.io/analysis-core
+// TODO: Monitor this: https://github.com/jenkinsci/pipeline-plugin/blob/master/COMPATIBILITY.md#build-steps-and-post-build-actions
 // TODO: https://github.com/phpstan/phpstan + extensions
 // TODO: https://github.com/sebastianbergmann/phpdcd
 // TODO: violations https://issues.jenkins-ci.org/browse/JENKINS-26039
