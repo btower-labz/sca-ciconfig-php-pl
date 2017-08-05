@@ -49,6 +49,23 @@ pipeline {
     stage('process') {
       steps {
         parallel (
+          'taskspub': {
+            node ('ant') {
+              unstash 'source'
+              step([
+                $class: 'TasksPublisher',
+                pattern:  **/*.php',
+                high: "FIXME, XXX, BUG",
+                normal: "TODO",
+                low: "LATER",
+                ignoreCase: true,
+                asRegexp: false,
+                unstableTotalAll: '0', 
+                usePreviousBuildAsReference: true,
+              ])
+              deleteDir()
+            }
+          },
           'phploc-txt': {
             node ('php&&ant') {
               unstash 'source'
