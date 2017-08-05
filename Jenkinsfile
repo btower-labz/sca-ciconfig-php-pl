@@ -54,7 +54,7 @@ pipeline {
               unstash 'source'
               step([
                 $class: 'TasksPublisher',
-                pattern:  **/*.php',
+                pattern:  '**/*.php',
                 high: "FIXME, XXX, BUG",
                 normal: "TODO",
                 low: "LATER",
@@ -135,12 +135,17 @@ pipeline {
                 stash name: 'phpmd.log', includes: 'phpmd.log'
                 stash name: 'phpmd.xml', includes: 'phpmd.xml'
               }
+              // TODO: set threshholds
+              // TODO: move parallel, use xmlstarlet
+              pmd pattern: '**/build/phpmd.xml', unstableTotalAll: '0', usePreviousBuildAsReference: true
+              /*
               step([
                 $class: 'PmdPublisher',
                 pattern: '**/build/phpmd.xml', 
                 unstableTotalAll: '0', 
                 usePreviousBuildAsReference: true
               ])
+              */
               deleteDir()
             }
           },
@@ -212,7 +217,8 @@ pipeline {
                 stash name: 'phpcpd.xml', includes: 'phpcpd.xml'
               }
               // TODO: move it to parralel (xmlstarlet)
-              // dry canRunOnFailed: true, pattern: '**/build/phpcpd.xml', unstableTotalAll: '0', usePreviousBuildAsReference: true, highThreshold : 50, normalThreshold : 25
+              dry canRunOnFailed: true, pattern: '**/build/phpcpd.xml', unstableTotalAll: '0', usePreviousBuildAsReference: true, highThreshold : 50, normalThreshold : 25
+              /*
               step([
                 $class: 'DryPublisher',
                 pattern:  * * / build/phpcpd.xml', 
@@ -221,6 +227,7 @@ pipeline {
                 highThreshold : 50,
                 normalThreshold : 25
               ])
+              */
               deleteDir()
             }
           },
