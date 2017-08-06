@@ -263,6 +263,8 @@ pipeline {
               
               // TODO: move parallel
               // FIXME: wount work as expected. cannot resolve php packages. Use CloverPHPPublisher when it will  be ready
+              // Regular clover wount work. Serialization error for PHP results.
+              /*
               step([
                 $class: 'CloverPublisher',
                 cloverReportDir: './build',
@@ -271,6 +273,7 @@ pipeline {
                 unhealthyTarget: [methodCoverage: 50, conditionalCoverage: 50, statementCoverage: 50], // optional, default is none
                 failingTarget: [methodCoverage: 0, conditionalCoverage: 0, statementCoverage: 0]     // optional, default is none
               ])
+              */
               
               deleteDir()
             }
