@@ -19,12 +19,12 @@ pipeline {
         node('php') {
           timeout(time: 5, unit: 'MINUTES'){
             dir('config'){
-              sh 'mkdir -p /home/jenkins/.ssh'
-              sh 'touch /home/jenkins/.ssh/known_hosts'
-              sh 'ssh-keyscan -H gitlab.com >> ~/.ssh/known_hosts'
+              //sh 'mkdir -p /home/jenkins/.ssh'
+              //sh 'touch /home/jenkins/.ssh/known_hosts'
+              //sh 'ssh-keyscan -H gitlab.com >> ~/.ssh/known_hosts'
               //sshagent (credentials: ['gitlab']) {
               //  git url: 'git@gitlab.com:free-sca-src-cfg/free-sca-slim-cfg.git', changelog: true, poll: true, credentialsId: 'gitlab'
-                git url: 'https://github.com/btower-labz/sca-ciconfig-php-pl', changelog: true, poll: true
+                git url: 'https://github.com/btower-labz/sca-ciconfig-php-pl', branch: 'latest', changelog: true, poll: true
               //}
               stash name: 'phpunit.xml', includes: 'phpunit.xml'
               stash name: 'phpdox.xml', includes: 'phpdox.xml'
