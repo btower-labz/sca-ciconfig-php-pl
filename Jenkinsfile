@@ -10,6 +10,7 @@
 // TODO: https://samate.nist.gov/index.php/Source_Code_Security_Analyzers.html
 // TODO: https://www.owasp.org/index.php/Static_Code_Analysis#OWASP_LAPSE.2B_Static_Code_Analysis_Tool
 
+
 pipeline {
   agent none
   stages {
