@@ -1,2 +1,3 @@
-# free-sca-slim-cfg
-free-sca-slim-cfg
+# sca-ciconfig-php-pl
+sca-ciconfig-php-pl
+
