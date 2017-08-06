@@ -5,6 +5,11 @@
 // TODO: violations https://issues.jenkins-ci.org/browse/JENKINS-26039
 // TODO: https://wiki.jenkins.io/display/JENKINS/JDepend+Plugin
 // TODO: https://wiki.jenkins.io/display/JENKINS/OWASP+Dependency-Check+Plugin
+// TODO: http://awap.sourceforge.net/support.html
+// TODO: https://www.owasp.org/index.php/OWASP_WAP-Web_Application_Protection#tab=Main
+// TODO: https://samate.nist.gov/index.php/Source_Code_Security_Analyzers.html
+// TODO: https://www.owasp.org/index.php/Static_Code_Analysis#OWASP_LAPSE.2B_Static_Code_Analysis_Tool
+
 pipeline {
   agent none
   stages {
