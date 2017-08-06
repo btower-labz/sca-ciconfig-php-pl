@@ -16,7 +16,7 @@ pipeline {
   stages {
     stage('prepare') {
       steps {
-        node('php') {
+        node('sca') {
           timeout(time: 5, unit: 'MINUTES'){
             dir('config'){
               //sh 'mkdir -p /home/jenkins/.ssh'
@@ -62,7 +62,7 @@ pipeline {
       steps {
         parallel (
           'taskspub': {
-            node ('ant') {
+            node ('sca') {
               unstash 'source'
               step([
                 $class: 'TasksPublisher',
@@ -79,7 +79,7 @@ pipeline {
             }
           },
           'phploc-txt': {
-            node ('php&&ant') {
+            node ('ant&&phploc') {
               unstash 'source'
               unstash 'build.xml'
               sh 'ant prepare'
@@ -92,7 +92,7 @@ pipeline {
             }
           },
           'phploc-xml': {
-            node ('php&&ant') {
+            node ('ant&&phploc') {
               unstash 'source'
               unstash 'build.xml'
               sh 'ant prepare'
@@ -263,8 +263,7 @@ pipeline {
               
               // TODO: move parallel
               // FIXME: wount work as expected. cannot resolve php packages. Use CloverPHPPublisher when it will  be ready
-              // Regular clover wount work. Serialization error for PHP results.
-              /*
+              // FIXME: Regular clover wount work as expected. Serialization error for PHP results.
               step([
                 $class: 'CloverPublisher',
                 cloverReportDir: './build',
@@ -273,13 +272,12 @@ pipeline {
                 unhealthyTarget: [methodCoverage: 50, conditionalCoverage: 50, statementCoverage: 50], // optional, default is none
                 failingTarget: [methodCoverage: 0, conditionalCoverage: 0, statementCoverage: 0]     // optional, default is none
               ])
-              */
               
               deleteDir()
             }
           },
           'phpdox': {
-            node ('phpunit&&ant') {
+            node ('phpdox&&ant') {
               echo 'fetch from local scm ...'
               unstash 'source'
               unstash 'build.xml'
@@ -306,7 +304,7 @@ pipeline {
       steps {
         parallel (
           'archive': {
-            node ('ant') {
+            node ('sca') {
               echo 'unstash result  data ...'
               dir('output'){
                 // php-lint
@@ -462,7 +460,7 @@ pipeline {
           },
           */          
           'phpdox': {
-            node ('ant') {    
+            node ('sca') {    
               dir('api')
               {
                 unstash 'api'
@@ -480,7 +478,7 @@ pipeline {
           },
           // TODO: too ugly
           'pdependhtml': {
-            node ('ant') {    
+            node ('sca') {    
               dir('pdepend')
               {
                 unstash 'dependencies.svg'
@@ -499,7 +497,7 @@ pipeline {
             }
           },
           'coveragehtml': {
-            node ('ant') {    
+            node ('sca') {    
               dir('coverage')
               {
                 unstash 'coverage'
