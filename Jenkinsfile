@@ -19,7 +19,7 @@ pipeline {
         node('php') {
           timeout(time: 5, unit: 'MINUTES'){
             dir('config'){
-              sh 'mkfir -p /home/jenkins/.ssh'
+              sh 'mkdir -p /home/jenkins/.ssh'
               sh 'touch /home/jenkins/.ssh/known_hosts'
               sh 'ssh-keyscan -H gitlab.com >> ~/.ssh/known_hosts'
               //sshagent (credentials: ['gitlab']) {
