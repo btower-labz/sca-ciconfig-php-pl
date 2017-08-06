@@ -14,9 +14,10 @@ pipeline {
           timeout(time: 5, unit: 'MINUTES'){
             dir('config'){
               sh 'ssh-keyscan -H gitlab.com >> ~/.ssh/known_hosts'
-              sshagent (credentials: ['gitlab']) {
-                git url: 'git@gitlab.com:free-sca-src-cfg/free-sca-slim-cfg.git', changelog: true, poll: true, credentialsId: 'gitlab'
-              }
+              //sshagent (credentials: ['gitlab']) {
+              //  git url: 'git@gitlab.com:free-sca-src-cfg/free-sca-slim-cfg.git', changelog: true, poll: true, credentialsId: 'gitlab'
+                git url: 'git@gitlab.com:free-sca-src-cfg/free-sca-slim-cfg.git', changelog: true, poll: true
+              //}
               stash name: 'phpunit.xml', includes: 'phpunit.xml'
               stash name: 'phpdox.xml', includes: 'phpdox.xml'
               stash name: 'phpcs.xml', includes: 'phpcs.xml'
